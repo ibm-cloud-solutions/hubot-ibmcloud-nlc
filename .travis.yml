@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - '4.2'
+install:
+  - 'npm install'
+script:
+  - 'npm run lint'
+  - 'npm run coverage'
+notifications:
+  slack: ${SLACK_TOKEN}

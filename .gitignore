@@ -1,0 +1,12 @@
+node_modules
+.hubot_history
+npm-debug.log
+config
+coverage
+gh-pages
+external-scripts.json
+test/**/*.trainingdata.json
+.npmrc
+.DS_Store
+databases
+log.txt

@@ -1,0 +1,35 @@
+{
+	"name": "hubot-ibmcloud-nlc",
+	"version": "0.0.1",
+	"classes": [
+	    {
+	      "class": "nlc.help",
+	      "emittarget": "nlc.help.js",
+	      "texts": [
+			"How can you help me?",
+			"What can you do for me?",
+			"In what topics are you trained?",
+			"help"
+		  ]
+	    },
+	    {
+	      "class": "nlc.feedback.negative",
+	      "emittarget": "nlc.feedback.negative.js",
+	      "texts": [
+			"That’s not what I asked for!",
+			"That’s incorrect.",
+			"You are a useless bot."
+		  ]
+	    },
+	    {
+	      "class": "nlc.train",
+	      "emittarget": "nlc.train.js",
+	      "texts": [
+			"Start a training session.",
+			"Can you go training?",
+			"Please start training.",
+			"train"
+		  ]
+	    }
+	]
+}

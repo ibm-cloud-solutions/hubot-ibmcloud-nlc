@@ -1,0 +1,9 @@
+{
+  "classifier_id": "cd02b5x110-nlc-5103",
+  "name": "test-classifier",
+  "language": "en",
+  "created": "2016-06-29T19:09:59.000Z",
+  "url": "https://testClassifierUrl",
+  "status": "Available",
+  "status_description": "The classifier instance is now available and is ready to take classifier requests."
+}

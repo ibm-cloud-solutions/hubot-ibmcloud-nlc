@@ -1,0 +1,69 @@
+{
+  "name": "hubot-ibmcloud-nlc",
+  "version": "0.0.25",
+  "description": "hubot-ibmcloud-nlc Natural Language Classifier",
+  "main": "index.js",
+  "respository": {
+    "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc",
+    "type": "git"
+  },
+  "scripts": {
+    "start": "source config/env && hubot -a shell",
+    "slack": "source config/env && hubot -a slack",
+    "facebook": "source config/env && hubot -a fb",
+    "lint": "eslint src/**/*.js test/*.js index.js",
+    "test": ". test/.env && mocha test",
+    "coverage": ". test/.env && istanbul cover -x '**/coverage/**' -x '**/tools/**' --include-all-sources --report lcov --report cobertura --report text --dir ./gh-pages/coverage _mocha -- test"
+  },
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "bluemix",
+    "cloud",
+    "slack",
+    "cognitive"
+  ],
+  "author": "ibm-cloud-solutions",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "coffee-script": "^1.10.0",
+    "eslint": "^2.9.0",
+    "eslint-config-strongloop": "^2.0.1",
+    "hubot": "^2.19.0",
+    "hubot-fb": "^3.0.0",
+    "hubot-help": "^0.2.0",
+    "hubot-shell": "^1.0.2",
+    "hubot-slack": "^3.4.2",
+    "hubot-test-helper": "^1.4.4",
+    "install": "^0.8.1",
+    "istanbul": "0.4.0",
+    "istanbul-cobertura-badger": "1.2.1",
+    "mocha": "^2.4.5",
+    "mocha-sprinkles": "^2.2.1",
+    "nock": "^8.0.0",
+    "npm": "^3.10.2",
+    "pouchdb": "^5.4.5",
+    "request": "^2.72.0",
+    "rewire": "2.5.1",
+    "shelljs": "^0.7.0"
+  },
+  "peerDependencies": {
+    "hubot": "^2.19.0"
+  },
+  "engines": {
+    "node": ">= 4.2.0"
+  },
+  "files": [
+    "resources",
+    "src",
+    "index.js"
+  ],
+  "dependencies": {
+    "hubot-ibmcloud-cognitive-lib": ">=0.0.17",
+    "hubot-ibmcloud-utils": ">=0.0.8",
+    "bluebird": "^3.4.1",
+    "hubot-conversation": "^1.1.1",
+    "i18n-2": "^0.6.3"
+  }
+}
