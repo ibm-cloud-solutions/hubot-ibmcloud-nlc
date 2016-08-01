@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/ibm-cloud-solutions/hubot-ibmcloud-nlc.svg?branch=master)](https://travis-ci.org/ibm-cloud-solutions/hubot-ibmcloud-nlc)
+[![Coverage Status](https://coveralls.io/repos/github/ibm-cloud-solutions/hubot-ibmcloud-nlc/badge.svg?branch=cleanup)](https://coveralls.io/github/ibm-cloud-solutions/hubot-ibmcloud-nlc?branch=cleanup)
+[![Dependency Status](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-nlc/badge)](https://dependencyci.com/github/ibm-cloud-solutions/hubot-ibmcloud-nlc)
+[![npm](https://img.shields.io/npm/v/hubot-ibmcloud-nlc.svg?maxAge=2592000)](https://www.npmjs.com/package/hubot-ibmcloud-nlc)
+
 # hubot-ibmcloud-nlc
 
 Starting point to add cognitive and natural language functionality to your Hubot.
@@ -10,7 +15,7 @@ Starting point to add cognitive and natural language functionality to your Hubot
 * [License](#license)
 * [Contribute](#contribute)
 
-## Overview <a id="overview"></a>
+## Overview
 
 If you can't remember when the right command is `exit`, `quit`, or `!q`, this project can help you to easily develop a bot that can understand natural language.
 
@@ -23,7 +28,7 @@ We also help you pull parameter values from a statement entered by the user.  Fo
 After the natural language processing has determined that this is a scale command, the needed parameter values (`appname` of `xyz` and `instances` of `4`) need to be pulled from the statement and forwarded to the function handling the command.
 
 
-## Cognitive Integration <a id="cognitive_integration"></a>
+## Cognitive Integration
 
 To integrate cognitive functionality in your Hubot
 
@@ -63,7 +68,7 @@ To integrate cognitive functionality in your Hubot
 	HUBOT_WATSON_NLC_CLASSIFIER=<(optional) Name for the classifier>
 	```
 
-1. (Optional) Configure Cognitive Learning (feedback loop).  For more information see: [docs/cognitiveLearning.md](docs/cognitiveLearning.md)
+1. (Optional) Configure Cognitive Learning (feedback loop).  For more information see: [docs/cognitiveLearning.md](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/cognitiveLearning.md)
 	```
 	HUBOT_CLOUDANT_ENDPOINT=
 	HUBOT_CLOUDANT_KEY=
@@ -192,7 +197,7 @@ The intended general flow for the natural language processing is as follows:
  * One pass is made for each parameter to pull the parameter value from the statement using the parameter type.  This is done my invoking a function for that parameter type that uses hard-coded values, the 'poc' package, and/or the Watson Alchemy service to attempt to find the right parameter value.
 
  * A second pass is made for each parameter for which a value was not obtained on the first pass.  On this pass, the statement is modified to remove all parameter values successfully obtained on the first pass.  The same parameter type function used in the first pass is used again on this pass.
- 
+
  * Finally, if both passes do not provide a value for one or more required parameters, then a bot conversation is used to ask the user for each missing parameter value.  When the user responds, the response is used to pull the value using the two passes above.  If this still fails, the user is asked to specify just the parameter value as a single word.  When the user responds to this, the response is assumed to be the parameter value.
 
 1. After the class has been determined and the parameter values obtained, then the emit target associated with the class and the parameters are forwarded to the auth component to make sure that the user has the authority to issue this command.
@@ -202,10 +207,10 @@ The intended general flow for the natural language processing is as follows:
 1. The emit target listener within the command script gets control.  It should validate that it has the needed parameter values and then proceed with the same command processing that occurs if it had been received via the regex path.
 
 
-## License <a id="license"></a>
+## License
 
-See [LICENSE.txt](./LICENSE.txt) for license information.
+See [LICENSE.txt](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/LICENSE.txt) for license information.
 
-## Contribute <a id="contribute"></a>
+## Contribute
 
-Please check out our [Contribution Guidelines](./CONTRIBUTING.md) for detailed information on how you can lend a hand.
+Please check out our [Contribution Guidelines](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/CONTRIBUTING.md) for detailed information on how you can lend a hand.

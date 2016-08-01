@@ -31,23 +31,16 @@
     "coveralls": "^2.11.12",
     "eslint": "^2.9.0",
     "eslint-config-strongloop": "^2.0.1",
-    "hubot": "^2.19.0",
     "hubot-fb": "^3.0.0",
     "hubot-help": "^0.2.0",
     "hubot-shell": "^1.0.2",
     "hubot-slack": "^3.4.2",
     "hubot-test-helper": "^1.4.4",
-    "install": "^0.8.1",
     "istanbul": "0.4.0",
-    "istanbul-cobertura-badger": "1.2.1",
     "mocha": "^2.4.5",
     "mocha-sprinkles": "^2.2.1",
     "nock": "^8.0.0",
-    "npm": "^3.10.2",
-    "pouchdb": "^5.4.5",
-    "request": "^2.72.0",
-    "rewire": "2.5.1",
-    "shelljs": "^0.7.0"
+    "pouchdb": "^5.4.5"
   },
   "peerDependencies": {
     "hubot": "^2.19.0"
