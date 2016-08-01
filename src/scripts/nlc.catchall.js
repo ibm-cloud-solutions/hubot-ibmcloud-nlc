@@ -135,6 +135,7 @@ module.exports = function(robot) {
 			// make sure we have more than one word in the text
 			if (text.split(' ').length > 1){
 				processNLC(robot, text).then((result) => {
+					robot.emit('ibmcloud-nlc-to-audit', res);
 					robot.emit(result.target, res, result.parameters);
 				},
 				(reject) => {
