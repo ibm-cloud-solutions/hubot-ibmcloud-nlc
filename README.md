@@ -132,12 +132,14 @@ To integrate cognitive functionality in your Hubot
 1. Load the NLC training data into the database
 	- The default location for the training data is `src/nlc/NLC.json`
 	- Add the following to your `package.json`
-		```
+		
+		``` json
 		"scripts": {
 			"postinstall": "initDb path/to/NLC.json"
 		}
 		```
 	- To update the database during development, remove the `/databases` directory and re-initialize the database.
+		
 		```
 		rm -rf databases
 		initDb path/to/NLC.json
