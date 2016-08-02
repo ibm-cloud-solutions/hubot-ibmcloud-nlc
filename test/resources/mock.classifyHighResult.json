@@ -1,6 +1,6 @@
 { "classifier_id": "cd02b5x110-nlc-5110",
   "url": "https://watson-nlc-api/v1/classifiers/cd02b5x110-nlc-5110",
-  "text" : "I want a high confidence result",
+  "text" : "high confidence result",
   "top_class": "weather.js",
   "classes":
    [ { "class_name": "weather.js", "confidence": 0.9662086742164803 },

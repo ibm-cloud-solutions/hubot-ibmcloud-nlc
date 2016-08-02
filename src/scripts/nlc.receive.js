@@ -21,35 +21,7 @@
 'use strict';
 
 const path = require('path');
-const env = require(path.resolve(__dirname, '..', 'lib', 'env'));
-const constants = require(path.resolve(__dirname, '..', 'lib', 'constants'));
-
-function logMessage(robot, res, key, text) {
-	let info = robot.brain.get(key) || {
-		logs: []
-	};
-	// messagesToSave is trigged by a low or medium confidence result event flow
-	if (info && info.messagesToSave){
-		info.logs.push(text);
-
-		info.messagesToSave = info.messagesToSave - 1;
-		if (info.messagesToSave === 0){
-			robot.emit('nlc.feedback.negative.js', res, info);
-			info = null;
-		}
-	}
-	else {
-		// general log flow, save current and previous
-		// messagesToSave is used as the default for both historical and future requests
-		info.logs.push(text);
-
-		if (info.logs.length > (2 * env.messagesToSave)){
-			info.logs = info.logs.slice(1);
-		}
-	}
-
-	robot.brain.set(key, info);
-}
+const utils = require(path.resolve(__dirname, '..', 'lib', 'utils'));
 
 module.exports = function(robot) {
 	const botName = robot.name;
@@ -71,8 +43,7 @@ module.exports = function(robot) {
 			// make sure we have more than one word in the text
 			if (text.split(' ').length > 1){
 				let userId = res.envelope.user.id;
-				let key = userId + constants.LOGGER_KEY_SUFFIX;
-				logMessage(robot, res, key, text.trim());
+				utils.logMessage(robot, res, userId, text.trim());
 			}
 		}
 

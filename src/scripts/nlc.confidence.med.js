@@ -22,13 +22,13 @@
 const path = require('path');
 const TAG = path.basename(__filename);
 const utils = require('hubot-ibmcloud-utils').utils;
+const logUtils = require('../lib/utils');
 const Conversation = require('hubot-conversation');
 const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
 const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
 const ParamManager = require('hubot-ibmcloud-cognitive-lib').paramManager;
 const extractParameters = require('../lib/extractParameters');
 const env = require('../lib/env');
-const constants = require('../lib/constants');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -75,7 +75,7 @@ module.exports = function(robot) {
 					while (s.length < size) s = ' ' + s;
 					return s;
 				};
-				prompt += `(${i}) [${pad(confidence, 5)}%] ${classification.classes[i].class_name}\n`;
+				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${classification.classes[i].class_name}\n`;
 				nOpts++;
 			}
 		}
@@ -88,6 +88,8 @@ module.exports = function(robot) {
 			var resNum = parseInt(response, 10);
 			if (resNum < nOpts){
 				var selectedClass = classification.classes[resNum].class_name;
+				let userId = res.envelope.user.id;
+				logUtils.logMessage(robot, res, userId, `${prompt}\n${resNum}`);
 
 				db.post(classification, 'learned', selectedClass).then(() => {
 					res.reply(i18n.__('nlc.confidence.med.classify', classification.text, classification.classes[resNum].class_name));
@@ -121,15 +123,7 @@ module.exports = function(robot) {
 			else {
 				db.post(classification, 'unclassified').then((doc) => {
 					let userId = res.envelope.user.id;
-					let key = userId + constants.LOGGER_KEY_SUFFIX;
-					// info contains doc id
-					// don't write over current logger
-					let info = robot.brain.get(key) || {};
-					if (!info.hasOwnProperty('messagesToSave')){
-						info.messagesToSave = env.messagesToSave;
-						info.id = doc.id;
-						robot.brain.set(key, info);
-					}
+					logUtils.logMessage(robot, res, userId, `${prompt}\n${nOpts}`, doc.id);
 					res.reply(i18n.__('nlc.confidence.med.error'));
 				}).catch((err) => {
 					res.reply(i18n.__('nlc.save.error'));
