@@ -15,7 +15,7 @@ const env = require('../src/lib/env');
 
 const timeout = 5000;
 
-function waitForDocType(db, type, rev){
+function waitForDocType(db, type, rev, text){
 	let docId;
 
 	return sprinkles.eventually({
@@ -25,19 +25,34 @@ function waitForDocType(db, type, rev){
 			include_docs: true
 		}).then((allDocs) => {
 			let found = false;
+			docId = null;
+
 			for (let d of allDocs.rows){
 				let doc = d.doc;
 				if (doc.type === type){
-					if (rev){
+					if (rev !== undefined){
 						let docRev = parseInt(doc._rev[0], 10);
 						if (rev === docRev){
-							found = true;
+							if (text !== undefined) {
+								let txt = doc.classification.text;
+								if (txt === text){
+									found = true;
+								}
+							}
+							else {
+								// no text match specified
+								found = true;
+							}
 						}
 					}
 					else {
+						// no revision
 						found = true;
 					}
-					docId = doc._id;
+					if (found){
+						docId = doc._id;
+						break;
+					}
 				}
 			}
 			if (!found){
@@ -94,7 +109,10 @@ describe('Test the NLC interaction', function(){
 					waitForDocType(db, 'unclassified', 2).then(() => {
 						db.get(docId).then((doc) => {
 							expect(doc.logs).to.exist;
-							expect(doc.logs.length).to.eql(4);
+							expect(doc.logs.length).to.eql(3);
+							expect(doc.logs[0]).to.eql('log this - 1');
+							expect(doc.logs[1]).to.eql('log this - 2');
+							expect(doc.logs[2]).to.eql('log this - 3');
 							done();
 						});
 					});
@@ -106,20 +124,60 @@ describe('Test the NLC interaction', function(){
 
 		it('should emit a medium classification event', function(done) {
 			room.robot.on('nlc.confidence.med.js', (res, classification) => {
-				// there will be a dialog with the user to select a match
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 2){
 						throw new Error('too soon');
 					}
 				}).then(() => false).catch(() => true).then((success) => {
-					room.user.say('mimiron', '0');
+					// reply with correct
+					room.user.say('mimiron', '1');
 					// check the database for the document training
-					return waitForDocType(db, 'learned').then(() => {
-						done();
+					return waitForDocType(db, 'learned').then((docId) => {
+						db.get(docId).then((doc) => {
+							done();
+						});
 					});
 				});
 			});
+			// there will be a dialog with the user to select a match
 			room.user.say('mimiron', 'hubot medium confidence result');
+		});
+
+		it('should emit a medium classification event and not be classified correctly', function(done) {
+			const msg = 'medium confidence result with no classification';
+			room.robot.on('nlc.confidence.med.js', (res, classification) => {
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 2){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					// reply with incorrect
+					room.user.say('mimiron', '2');
+
+					// check the database for the document training
+					return waitForDocType(db, 'unclassified', 1, msg).then((docId) => {
+						// say a bunch to cause the log to be saved
+						room.user.say('mimiron', 'hubot log this - 1');
+						room.user.say('mimiron', 'hubot log this - 2');
+						// the next message won't be logged
+						room.user.say('mimiron', 'hubot log this - 3');
+
+						return waitForDocType(db, 'unclassified', 2, msg).then((docId) => {
+							db.get(docId).then((doc) => {
+								expect(doc.logs.length).to.eql(3);
+								// test dialog was captured
+								expect(doc.logs[0].startsWith('[Med confidence]')).to.eql(true);
+								expect(doc.logs[1]).to.eql('log this - 1');
+								expect(doc.logs[2]).to.eql('log this - 2');
+								done();
+							});
+						});
+
+					});
+				});
+			});
+			// there will be a dialog with the user to select a match
+			room.user.say('mimiron', `hubot ${msg}`);
 		});
 
 		it('should emit a high classification event', function(done) {
@@ -152,6 +210,9 @@ describe('Test the NLC interaction', function(){
 						expect(doc.logs.length).to.eql(6);
 						expect(doc.logs[5]).to.eql('negative feedback');
 						expect(doc.logs[4]).to.eql('high 8');
+						expect(doc.logs[3]).to.eql('high 7');
+						expect(doc.logs[2]).to.eql('high 6');
+						expect(doc.logs[1]).to.eql('high 5');
 						expect(doc.logs[0]).to.eql('high 4');
 						done();
 					});

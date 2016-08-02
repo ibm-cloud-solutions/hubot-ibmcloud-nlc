@@ -21,8 +21,7 @@
 const path = require('path');
 const TAG = path.basename(__filename);
 const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
-const env = require('../lib/env');
-const constants = require('../lib/constants');
+const utils = require('../lib/utils');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -59,15 +58,7 @@ module.exports = function(robot) {
 		db.post(classification, 'unclassified').then((doc) => {
 			res.reply(prompt);
 			let userId = res.envelope.user.id;
-			let key = userId + constants.LOGGER_KEY_SUFFIX;
-			// info contains doc id
-			// don't write over current logger
-			let info = robot.brain.get(key) || {};
-			if (!info.hasOwnProperty('messagesToSave')){
-				info.messagesToSave = env.messagesToSave;
-				info.id = doc.id;
-				robot.brain.set(key, info);
-			}
+			utils.logMessage(robot, res, userId, null, doc.id);
 		}).catch((err) => {
 			res.reply(i18n.__('nlc.save.error'));
 			robot.logger.error(err);

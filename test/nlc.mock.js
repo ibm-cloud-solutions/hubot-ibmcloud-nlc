@@ -13,6 +13,7 @@ const nlcEndpoint = env.nlc_url;
 
 const mockLowCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyLowResult.json'));
 const mockMediumCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyMediumResult.json'));
+const mockMediumNoCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyMediumNoClassResult.json'));
 const mockHighCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyHighResult.json'));
 const mockNegFbResult = require(path.resolve(__dirname, 'resources', 'mock.classifyNegFbResult.json'));
 
@@ -52,6 +53,12 @@ module.exports = {
 			text: 'low confidence result'
 		})
 		.reply(200, mockLowCfResult);
+
+		// Mock route to get classification data.
+		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
+			text: 'medium confidence result with no classification'
+		})
+		.reply(200, mockMediumNoCfResult);
 
 		// Mock route to get classification data.
 		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
