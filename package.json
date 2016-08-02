@@ -19,7 +19,7 @@
 	"hubot",
 	"hubot-scripts",
 	"cognitive",
-    "nlc",
+    	"nlc",
   	"natural language",
   	"watson natural language classifier",
   	"parameter extraction",
