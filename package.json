@@ -1,7 +1,7 @@
 {
   "name": "hubot-ibmcloud-nlc",
   "version": "0.0.25",
-  "description": "hubot-ibmcloud-nlc Natural Language Classifier",
+  "description": "Adds Natural Language capabilities to Hubot",
   "main": "index.js",
   "respository": {
     "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc",
@@ -16,12 +16,14 @@
     "coverage": ". test/.env && istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "keywords": [
-    "hubot",
-    "hubot-scripts",
-    "bluemix",
-    "cloud",
-    "slack",
-    "cognitive"
+	"hubot",
+	"hubot-scripts",
+	"cognitive",
+    "nlc",
+  	"natural language",
+  	"watson natural language classifier",
+  	"parameter extraction",
+	"ibm cloud"
   ],
   "author": "ibm-cloud-solutions",
   "license": "Apache-2.0",

@@ -5,7 +5,7 @@
 
 # hubot-ibmcloud-nlc
 
-Starting point to add cognitive and natural language functionality to your Hubot.
+Adds a framework to enable Natural Language interactions in your Hubot scripts.
 
 
 ## Getting Started
@@ -19,7 +19,7 @@ Starting point to add cognitive and natural language functionality to your Hubot
 
 If you can't remember when the right command is `exit`, `quit`, or `!q`, this project can help you to easily develop a bot that can understand natural language.
 
-You won't have to think of every possible way your users could formulate a request.  With as litle as 3 training statements we can recognize other statements with the same meaning.  We use IBM Watson Natural Language Classifier to extract the intent of a statement.
+You won't have to think of every possible way your users could formulate a request.  With as little as 3 training statements we can recognize other statements with the same meaning.  We use **IBM Watson Natural Language Classifier** to extract the intent of the statement.
 
 We provide tools to help you improve your training data corpus based on what your users are actually asking.
 
@@ -86,6 +86,7 @@ To integrate cognitive functionality in your Hubot
 1. Create a Natural Language classification / parameter definition file.
 	- For detailed information about the contents of this file see the documentation on `hubot-ibmcloud-cognitive-lib`
 	- The file should be added at `<project>/src/nlc/NLC.json`.
+	- **TIP:** Start with just 3 unique texts per classification and add more statements only when the classifier fails to classify the statement. The training UI should help with this process.
 	- Sample NLC.json for a weather bot.
 	``` json
 	{   
@@ -129,10 +130,18 @@ To integrate cognitive functionality in your Hubot
 	```
 
 1. Load the NLC training data into the database
-	```
-	$ initDb relative/path/to/NLC.json
-	```
-	- The default location is `src/nlc/NLC.json`
+	- The default location for the training data is `src/nlc/NLC.json`
+	- Add the following to your `package.json`
+		```
+		"scripts": {
+			"postinstall": "initDb path/to/NLC.json"
+		}
+		```
+	- To update the database during development, remove the `/databases` directory and re-initialize the database.
+		```
+		rm -rf databases
+		initDb path/to/NLC.json
+		```
 	- **NOTE:** npm should install `initDb` from `hubot-ibmcloud-cognitive-lib`. If you get a "command not found" error, you can access this script from `node_modules\.bin\initDb`
 
 1. Train the Natural Language classifier.
@@ -144,7 +153,7 @@ To integrate cognitive functionality in your Hubot
 	```javascript
 	module.exports = (robot) => {
 		robot.on('weather.precipitation', (res, parameters) => {
-			robot.logger.debug(`Natural Language match.`);
+			robot.logger.debug(`weather.precipitation - Natural Language match.`);
 			// Parameter values are obtain through the cognitive/nlc process.
 			// Verify that required parameter values were succesfully obtained.
 			if (parameters && parameters.location) {
@@ -156,7 +165,7 @@ To integrate cognitive functionality in your Hubot
 			}
 		});
 		robot.respond(SHOW_WEATHER, {id: 'weather.precipitation'}, function(res) {
-			roboat.logger.debug(`RegEx match.`);
+			robot.logger.debug(`weather.precipitation - RegEx match.`);
 			// Parameter values are set via regular expression match.
 			// If a required parameter value is not specified, the regex match should fail.
 			processWeather(res, res.match[N]);
