@@ -50,12 +50,11 @@ module.exports = function(robot) {
 		}).catch((err) => {
 			robot.logger.error(err);
 		});
-		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match`);
+
 		res.send(i18n.__('nlc.feedback.negative'));
 	});
 
 	function handle(db, robot, res, info){
-		res.send(i18n.__('nlc.feedback.negative'));
 		if (info && info.id){
 			// low / med event log path
 			// save additional input texts to original 'target' document

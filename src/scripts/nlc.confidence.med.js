@@ -55,10 +55,13 @@ module.exports = function(robot) {
 	robot.on(path.basename(__filename), (res, classification) => {
 		// promise result is cached
 		nlcDb.open().then((db) => {
-			let classNames = classification.classes.map((clz) => {
-				return clz.class_name;
+			let descriptionPromises = classification.classes.map((clz) => {
+				return nlcconfig.getClassEmitTarget(clz.class_name).then((classData) => {
+					return (classData && classData.description) ? classData.description : clz.class_name;
+				});
 			});
-			nlcconfig.getClassDescriptions(classNames).then((descriptions) => {
+
+			Promise.all(descriptionPromises).then((descriptions) => {
 				handle(db, res, classification, robot, descriptions);
 			});
 		}).catch((err) => {
@@ -80,7 +83,7 @@ module.exports = function(robot) {
 					while (s.length < size) s = ' ' + s;
 					return s;
 				};
-				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${descriptions[classification.classes[i].class_name]}\n`;
+				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${descriptions[i]}\n`;
 				nOpts++;
 			}
 		}
