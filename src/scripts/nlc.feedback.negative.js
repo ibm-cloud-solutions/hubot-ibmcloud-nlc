@@ -43,18 +43,18 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 	robot.on(path.basename(__filename), (res, info) => {
+		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match. info=${JSON.stringify(info, null, 2)}`);
 		// promise result is cached
 		nlcDb.open().then((db) => {
 			handle(db, robot, res, info);
 		}).catch((err) => {
 			robot.logger.error(err);
 		});
-		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match`);
+
 		res.send(i18n.__('nlc.feedback.negative'));
 	});
 
 	function handle(db, robot, res, info){
-		res.send(i18n.__('nlc.feedback.negative'));
 		if (info && info.id){
 			// low / med event log path
 			// save additional input texts to original 'target' document

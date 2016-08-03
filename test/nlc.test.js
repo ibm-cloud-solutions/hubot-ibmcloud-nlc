@@ -72,10 +72,17 @@ describe('Test the NLC interaction', function(){
 		mockNLP.setupMockery();
 		return nlcDb.open().then((res) => {
 			db = res;
-			// add class mapping for negative feedback testing
 			return db.put({
-				_id: 'nlc.feedback.negative',
-				emittarget: 'nlc.feedback.negative.js'
+				// add class with description
+				_id: 'weather.alerts.js',
+				description: 'Description for weather alerts classification',
+				emittarget: 'weather.js'
+			}).then(() => {
+				// add class mapping for negative feedback testing
+				return db.put({
+					_id: 'nlc.feedback.negative',
+					emittarget: 'nlc.feedback.negative.js'
+				});
 			});
 		});
 	});
@@ -129,6 +136,9 @@ describe('Test the NLC interaction', function(){
 						throw new Error('too soon');
 					}
 				}).then(() => false).catch(() => true).then((success) => {
+					// Verify description strings are used.
+					expect(room.messages[1][1]).to.contain('(1) [20.64%] Description for weather alerts classification');
+
 					// reply with correct
 					room.user.say('mimiron', '1');
 					// check the database for the document training
