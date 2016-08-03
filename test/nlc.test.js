@@ -74,8 +74,8 @@ describe('Test the NLC interaction', function(){
 			db = res;
 			return db.put({
 				// add class with description
-				_id: 'weather.js',
-				description: 'Description for weather classification',
+				_id: 'weather.alerts.js',
+				description: 'Description for weather alerts classification',
 				emittarget: 'weather.js'
 			}).then(() => {
 				// add class mapping for negative feedback testing
@@ -137,7 +137,7 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 					// Verify description strings are used.
-					expect(room.messages[1][1]).to.contain('Description for weather classification');
+					expect(room.messages[1][1]).to.contain('(1) [20.64%] Description for weather alerts classification');
 
 					// reply with correct
 					room.user.say('mimiron', '1');
