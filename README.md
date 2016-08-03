@@ -84,7 +84,7 @@ To integrate cognitive functionality in your Hubot
 	```
 
 1. Create a Natural Language classification / parameter definition file.
-	- For detailed information about the contents of this file see the documentation on `hubot-ibmcloud-cognitive-lib`
+	- For detailed information about the contents of this file see the documentation on [hubot-ibmcloud-cognitive-lib](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-cognitive-lib/blob/master/README.md)
 	- The file should be added at `<project>/src/nlc/NLC.json`.
 	- **TIP:** Start with just 3 unique texts per classification and add more statements only when the classifier fails to classify the statement. The training UI should help with this process.
 	- Sample NLC.json for a weather bot.
@@ -95,6 +95,7 @@ To integrate cognitive functionality in your Hubot
 		"classes": [
 			{
 				"class": "weather",
+				"description": "Display weather conditions",
 				"emittarget": "weather.js",
 				"texts": [
 					"What is the weather?",
@@ -111,6 +112,7 @@ To integrate cognitive functionality in your Hubot
 			},
 			{
 				"class": "weather.precipitation",
+				"description": "Display precipitation forecast",
 				"emittarget": "weather.precipitation.js",
 				"texts": [
 					"Is it raining?",
@@ -132,14 +134,14 @@ To integrate cognitive functionality in your Hubot
 1. Load the NLC training data into the database
 	- The default location for the training data is `src/nlc/NLC.json`
 	- Add the following to your `package.json`
-		
+
 		``` json
 		"scripts": {
 			"postinstall": "initDb path/to/NLC.json"
 		}
 		```
 	- To update the database during development, remove the `/databases` directory and re-initialize the database.
-		
+
 		```
 		rm -rf databases
 		initDb path/to/NLC.json
