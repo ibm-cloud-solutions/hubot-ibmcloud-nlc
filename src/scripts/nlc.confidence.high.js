@@ -75,6 +75,7 @@ module.exports = function(robot) {
 								emitTarget: tgt.target,
 								emitParameters: validParameters
 							};
+							robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
 							robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
 						}).catch(function(error) {
 							robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);

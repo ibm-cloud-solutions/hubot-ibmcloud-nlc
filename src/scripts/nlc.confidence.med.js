@@ -55,14 +55,19 @@ module.exports = function(robot) {
 	robot.on(path.basename(__filename), (res, classification) => {
 		// promise result is cached
 		nlcDb.open().then((db) => {
-			handle(db, res, classification, robot);
+			let classNames = classification.classes.map((clz) => {
+				return clz.class_name;
+			});
+			nlcconfig.getClassDescriptions(classNames).then((descriptions) => {
+				handle(db, res, classification, robot, descriptions);
+			});
 		}).catch((err) => {
 			robot.logger.error(err);
 		});
 	});
 
 
-	function handle(db, res, classification, robot){
+	function handle(db, res, classification, robot, descriptions){
 		let prompt = i18n.__('nlc.confidence.med.prompt');
 		let nOpts = 0;
 		let l = classification.classes.length;
@@ -75,7 +80,7 @@ module.exports = function(robot) {
 					while (s.length < size) s = ' ' + s;
 					return s;
 				};
-				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${classification.classes[i].class_name}\n`;
+				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${descriptions[classification.classes[i].class_name]}\n`;
 				nOpts++;
 			}
 		}
@@ -104,6 +109,7 @@ module.exports = function(robot) {
 										emitTarget: tgt.target,
 										emitParameters: validParameters
 									};
+									robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
 									robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
 								}).catch(function(error) {
 									robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);

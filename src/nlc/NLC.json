@@ -4,6 +4,7 @@
 	"classes": [
 	    {
 	      "class": "nlc.help",
+		  "description": "Get help for using the bot",
 	      "emittarget": "nlc.help.js",
 	      "texts": [
 			"How can you help me?",
@@ -14,6 +15,7 @@
 	    },
 	    {
 	      "class": "nlc.feedback.negative",
+		  "description": "Report natural language misinterpretation",
 	      "emittarget": "nlc.feedback.negative.js",
 	      "texts": [
 			"That’s not what I asked for!",
@@ -23,6 +25,7 @@
 	    },
 	    {
 	      "class": "nlc.train",
+		  "description": "Train the natural language classifier",
 	      "emittarget": "nlc.train.js",
 	      "texts": [
 			"Start a training session.",
