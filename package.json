@@ -36,7 +36,7 @@
     "hubot-fb": "^3.0.0",
     "hubot-help": "^0.2.0",
     "hubot-shell": "^1.0.2",
-    "hubot-slack": "^3.4.2",
+    "hubot-slack": "^4.0.2",
     "hubot-test-helper": "^1.4.4",
     "istanbul": "0.4.0",
     "mocha": "^2.4.5",
