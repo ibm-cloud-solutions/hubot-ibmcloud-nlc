@@ -7,7 +7,6 @@
 'use strict';
 
 const path = require('path');
-const TAG = path.basename(__filename);
 const env = require(path.resolve(__dirname, '..', 'lib', 'env'));
 const NLCManager = require('hubot-ibmcloud-cognitive-lib').nlcManager;
 

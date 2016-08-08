@@ -263,3 +263,31 @@ describe('Test NLC error path', function(){
 		});
 	});
 });
+
+describe('Test ENV setup', function(){
+
+	let room;
+	beforeEach(function() {
+		env.nlc_enabled = false;
+		room = helper.createRoom();
+	});
+
+	afterEach(function() {
+		env.nlc_enabled = true;
+		room.destroy();
+	});
+
+	it('should not process statement as NLC when environment is not set.', function(done){
+		room.user.say('mimiron', 'hubot Can you process Natural Language?').then(() => {
+			return sprinkles.eventually({ timeout: timeout }, function(){
+				if (room.messages.length < 1){
+					throw new Error('too soon');
+				}
+			}).then(() => false).catch(() => true).then((success) => {
+				expect(room.messages.length).to.eql(2);
+				expect(room.messages[1][1]).to.eql('Your request didn\'t match any supported actions.  To see what I can do type `help`.');
+				done();
+			});
+		});
+	});
+});
