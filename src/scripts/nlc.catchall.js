@@ -24,7 +24,7 @@
 const path = require('path');
 const TAG = path.basename(__filename);
 const env = require(path.resolve(__dirname, '..', 'lib', 'env'));
-const NLCManager = require('hubot-ibmcloud-cognitive-lib').nlcManager;
+const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -44,7 +44,6 @@ const i18n = new (require('i18n-2'))({
 i18n.setLocale('en');
 
 let botName;
-let watson_nlc;
 
 /**
  * Strips the bot name from the given statement.
@@ -70,7 +69,7 @@ function stripBotName(text) {
 function processNLC(robot, text) {
 	return new Promise((resolve, reject) => {
 		// Invoke the NLC classifier to obtain a class best fitting the statement
-		return watson_nlc.classify(text).then((response) => {
+		return watsonServices.nlc.classify(text).then((response) => {
 			// If a best class is found, continue processing
 			if (response.top_class) {
 
@@ -116,43 +115,51 @@ function processNLC(robot, text) {
 module.exports = function(robot) {
 	botName = robot.name;
 
-	var watson_nlc_opts = {
-		url: env.nlc_url,
-		username: env.nlc_username,
-		password: env.nlc_password,
-		classifierName: env.nlc_classifier,
-		version: 'v1'
-	};
-
-	watson_nlc = new NLCManager(watson_nlc_opts, robot);
-
-	robot.catchAll((res) => {
-		// Respond only when the bot is addressed in a public room or if it's a private message.
-		if (res.message.user.name === res.message.user.room ||
-			res.message.text.indexOf(botName) >= 0) {
-			// Remove the bot name from the bot statement
-			let text = stripBotName(res.message.text).trim();
-			// make sure we have more than one word in the text
-			if (text.split(' ').length > 1){
-				processNLC(robot, text).then((result) => {
-					robot.emit('ibmcloud-nlc-to-audit', res);
-					robot.emit(result.target, res, result.parameters);
-				},
-				(reject) => {
-					if (reject.status === 'Training') {
-						robot.logger.info(`Unable to use Natural Language. ${reject.status_description}`);
-						res.send(`${reject.status_description}`);
+	if (env.nlc_enabled) {
+		robot.logger.info(`${TAG} Registering Natural Language processing.`);
+		robot.catchAll((res) => {
+			// Respond only when the bot is addressed in a public room or if it's a private message.
+			if (res.message.user.name === res.message.user.room ||
+				res.message.text.indexOf(botName) >= 0) {
+				// Remove the bot name from the bot statement
+				let text = stripBotName(res.message.text).trim();
+				// make sure we have more than one word in the text
+				if (text.split(' ').length > 1){
+					processNLC(robot, text).then((result) => {
+						robot.emit('ibmcloud-nlc-to-audit', res);
+						robot.emit(result.target, res, result.parameters);
+					},
+					(reject) => {
+						if (reject.status === 'Training') {
+							robot.logger.info(`${TAG}: Unable to use Natural Language. ${reject.status_description}`);
+							res.send(`${reject.status_description}`);
+							res.send(i18n.__('nlc.error.fallback'));
+						}
+						else {
+							throw reject;
+						}
+					}).catch((error) => {
+						robot.logger.error(`${TAG}: Error occurred trying to classify statement using NLC; statement = ${text}; error = ${error.error}.`);
+						res.send(i18n.__('nlc.error.unexpected.general'));
 						res.send(i18n.__('nlc.error.fallback'));
-					}
-					else {
-						throw reject;
-					}
-				}).catch((error) => {
-					robot.logger.error(`Error occurred trying to classify statement using NLC; statement = ${text}; error = ${error.error}.`);
-					res.send(i18n.__('nlc.error.unexpected.general'));
-					res.send(i18n.__('nlc.error.fallback'));
-				});
+					});
+				}
 			}
-		}
-	});
+		});
+	}
+	else {
+		robot.logger.info(`${TAG} Registering simple catchAll.  Natural Language processing is disabled.`);
+		robot.catchAll((res) => {
+			if (res.message.user.name === res.message.user.room ||
+				res.message.text.indexOf(botName) >= 0) {
+				// Remove the bot name from the bot statement
+				let text = stripBotName(res.message.text).trim();
+				// make sure we have more than one word in the text
+				if (text.split(' ').length > 1){
+					robot.logger.debug(`${TAG}: Unable to understand the statement. Natural Language processing is disabled.`);
+					res.send(i18n.__('nlc.no.match'));
+				}
+			}
+		});
+	}
 };

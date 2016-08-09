@@ -230,35 +230,70 @@ describe('Test the NLC interaction', function(){
 			});
 
 		});
-
-	});
-});
-
-describe('Test NLC error path', function(){
-	var room;
-	before(function(){
-		mockNLP.setupMockErrors();
 	});
 
-	beforeEach(function() {
-		room = helper.createRoom();
+
+	describe('User starts a new training session', function(){
+		it('should start training a new classifier', function(done){
+			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+				room.user.say('mimiron', 'yes');
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 4){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+
+					expect(room.messages.length).to.eql(4);
+					expect(room.messages[3][1]).to.eql('@mimiron Ok, I\'m going to start a new training session. Training a classifier takes about 15 minutes.');
+					done();
+				});
+			});
+
+		});
 	});
 
-	afterEach(function() {
-		room.destroy();
+
+	describe('Test ENV setup', function(){
+		before(function() {
+			env.nlc_enabled = false;
+		});
+		after(function() {
+			env.nlc_enabled = true;
+		});
+
+		it('should not process statement as NLC when environment is not set.', function(done){
+			room.user.say('mimiron', 'hubot Can you process Natural Language?').then(() => {
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 1){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					expect(room.messages.length).to.eql(2);
+					expect(room.messages[1][1]).to.eql('Your request didn\'t match any supported actions.  To see what I can do type `help`.');
+					done();
+				});
+			});
+		});
 	});
 
-	it('should fail gracefully when Watson NLC service has a 500 error.', function(done){
-		room.user.say('mimiron', 'hubot high confidence result').then(() => {
-			return sprinkles.eventually({ timeout: timeout }, function(){
-				if (room.messages.length < 2){
-					throw new Error('too soon');
-				}
-			}).then(() => false).catch(() => true).then((success) => {
-				expect(room.messages.length).to.eql(3);
-				expect(room.messages[1][1]).to.eql('I\'m having trouble processing natural language requests.  If the problem persist contact your bot administrator.');
-				expect(room.messages[2][1]).to.eql('In the meantime type `help` for a list of available commands.');
-				done();
+
+	describe('Test NLC error path', function(){
+		before(function(){
+			mockNLP.setupMockErrors();
+		});
+
+		it('should fail gracefully when Watson NLC service has a 500 error.', function(done){
+			room.user.say('mimiron', 'hubot high confidence result').then(() => {
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 2){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					expect(room.messages.length).to.eql(3);
+					expect(room.messages[1][1]).to.eql('I\'m having trouble processing natural language requests.  If the problem persist contact your bot administrator.');
+					expect(room.messages[2][1]).to.eql('In the meantime type `help` for a list of available commands.');
+					done();
+				});
 			});
 		});
 	});
