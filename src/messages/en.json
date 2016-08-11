@@ -19,6 +19,10 @@
   "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type `help`.",
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type `help`.",
 
+  "nlc.status.prompt": "You do not have any classifiers. Would you like to start training one?",
+  "nlc.status.safe": "Alright, maybe next time!",
+  "nlc.now.training": "Classifier is now training. I will let you know when training is complete.",
+
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."
 }

@@ -33,6 +33,16 @@
 			"Please start training.",
 			"train"
 		  ]
-	    }
+		},
+		{
+			"class": "nlc.status",
+			"description": "Show the status for the natural language classifier",
+	  	"emittarget": "nlc.status.js",
+	  		"texts": [
+					"Can you provide the status for my classifier",
+					"Please obtain the status of classifier",
+					"What is the status of nlc?"
+	  		]
+		}
 	]
 }
