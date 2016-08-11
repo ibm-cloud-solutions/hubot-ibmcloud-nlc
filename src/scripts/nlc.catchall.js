@@ -114,9 +114,10 @@ module.exports = function(robot) {
 	if (env.nlc_enabled) {
 		robot.logger.info(`${TAG} Registering Natural Language processing.`);
 		robot.catchAll((res) => {
-			// Respond only when the bot is addressed in a public room or if it's a private message.
-			if (res.message.user.name === res.message.user.room ||
-				res.message.text.indexOf(botName) >= 0) {
+			// Respond only when the bot is addressed in a public room or if it's a private message. Ignore other bots.
+			if (res.message.user.is_bot === false &&
+				(res.message.user.name === res.message.user.room ||
+				res.message.text.indexOf(botName) >= 0)) {
 				// Remove the bot name from the bot statement
 				let text = stripBotName(res.message.text).trim();
 				// make sure we have more than one word in the text
