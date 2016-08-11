@@ -49,12 +49,8 @@ let botName;
  * Strips the bot name from the given statement.
  */
 function stripBotName(text) {
-	let retText = text;
-	let botnameIndex = text.indexOf(botName);
-	if (botnameIndex >= 0) {
-		retText = text.substring(botnameIndex + botName.length);
-	}
-	return retText;
+	var nameToken = new RegExp('(^|\\s)@?' + botName + ':?\\s', 'g');
+	return text.replace(nameToken, ' ').trim();
 }
 
 /**
