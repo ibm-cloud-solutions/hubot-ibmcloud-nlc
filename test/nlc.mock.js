@@ -85,6 +85,10 @@ module.exports = {
 			return 'Some 500 error message from the NLC service';
 		});
 
+		// Mock route for classifier status.
+		nlcErrorScope.get('/v1/classifiers/cd02b5x110-nlc-5103')
+		.reply(500, 'Some 500 error message from the NLC service');
+
 
 		// Mock route to get classification data.
 		nlcErrorScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {

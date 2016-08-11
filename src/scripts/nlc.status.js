@@ -93,6 +93,7 @@ module.exports = function(robot) {
 			});
 		}
 		else {
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.status.not.configured')});
 			robot.logger.error(`${TAG} NLC is not configured.`);
 		}
 	}

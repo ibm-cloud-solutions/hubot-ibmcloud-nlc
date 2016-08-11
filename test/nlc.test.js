@@ -230,6 +230,19 @@ describe('Test the NLC interaction', function(){
 			});
 
 		});
+		context('user asks for classifier status', function() {
+			it('should reply with slack attachment with available classifier', function(done){
+				room.robot.on('ibmcloud.formatter', function(event) {
+					if (event.attachments && event.attachments.length >= 1){
+						expect(event.attachments.length).to.eql(1);
+						expect(event.attachments[0].title).to.eql('test-classifier');
+						expect(event.attachments[0].fields[0].value).to.eql('Available');
+						done();
+					}
+				});
+				room.user.say('mimiron', '@hubot nlc status').then();
+			});
+		});
 	});
 
 
@@ -248,10 +261,8 @@ describe('Test the NLC interaction', function(){
 					done();
 				});
 			});
-
 		});
 	});
-
 
 	describe('Test ENV setup', function(){
 		before(function() {
