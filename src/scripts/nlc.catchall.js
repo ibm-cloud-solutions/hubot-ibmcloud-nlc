@@ -115,7 +115,7 @@ module.exports = function(robot) {
 		robot.logger.info(`${TAG} Registering Natural Language processing.`);
 		robot.catchAll((res) => {
 			// Respond only when the bot is addressed in a public room or if it's a private message. Ignore other bots.
-			if (res.message.user.is_bot === false &&
+			if (res.message.user.name !== 'hubot' &&
 				(res.message.user.name === res.message.user.room ||
 				res.message.text.indexOf(botName) >= 0)) {
 				// Remove the bot name from the bot statement
