@@ -6,17 +6,18 @@
   */
 'use strict';
 
-const settings = {
-	nlc_url: process.env.HUBOT_WATSON_NLC_URL,
-	nlc_username: process.env.HUBOT_WATSON_NLC_USERNAME,
-	nlc_password: process.env.HUBOT_WATSON_NLC_PASSWORD,
+let settings = {
+	nlc_url: process.env.VCAP_SERVICES_NATURAL_LANGUAGE_CLASSIFIER_0_CREDENTIALS_URL || process.env.HUBOT_WATSON_NLC_URL,
+	nlc_username: process.env.VCAP_SERVICES_NATURAL_LANGUAGE_CLASSIFIER_0_CREDENTIALS_USERNAME || process.env.HUBOT_WATSON_NLC_USERNAME,
+	nlc_password: process.env.VCAP_SERVICES_NATURAL_LANGUAGE_CLASSIFIER_0_CREDENTIALS_PASSWORD || process.env.HUBOT_WATSON_NLC_PASSWORD,
 	nlc_classifier: process.env.HUBOT_WATSON_NLC_CLASSIFIER || 'default-hubot-classifier',
-	nlc_enabled: process.env.HUBOT_WATSON_NLC_USERNAME && process.env.HUBOT_WATSON_NLC_PASSWORD,
 	highThreshold: process.env.CONFIDENCE_THRESHOLD_HIGH || '0.9',
 	lowThreshold: process.env.CONFIDENCE_THRESHOLD_LOW || '0.3',
 	messagesToSave: process.env.NEGATIVE_MESSAGES_SAVE_COUNT || '3',
 	paramParsingDisabled: process.env.PARAM_PARSING_DISABLED || false
 };
+
+settings.nlc_enabled = settings.nlc_username && settings.nlc_password;
 
 if (!settings.nlc_url) {
 	console.warn('HUBOT_WATSON_NLC_URL not set. Using default URL for the service.');
