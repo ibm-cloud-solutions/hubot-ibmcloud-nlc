@@ -17,7 +17,7 @@ let settings = {
 	paramParsingDisabled: process.env.PARAM_PARSING_DISABLED || false
 };
 
-settings.nlc_enabled = settings.nlc_username || settings.nlc_password;
+settings.nlc_enabled = settings.nlc_username && settings.nlc_password;
 
 if (!settings.nlc_url) {
 	console.warn('HUBOT_WATSON_NLC_URL not set. Using default URL for the service.');
