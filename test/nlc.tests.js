@@ -12,8 +12,22 @@ const sprinkles = require('mocha-sprinkles');
 const helper = new Helper('../src/scripts');
 const mockNLP = require('./nlc.mock');
 const env = require('../src/lib/env');
+const path = require('path');
+const appRoot = require('app-root-path');
 
 const timeout = 5000;
+
+const i18n = new (require('i18n-2'))({
+	locales: ['en'],
+	extension: '.json',
+	// Add more languages to the list of locales when the files are created.
+	directory: path.join(appRoot.toString(), 'src', 'messages'),
+	defaultLocale: 'en',
+	// Prevent messages file from being overwritten in error conditions (like poor JSON).
+	updateFiles: false
+});
+// At some point we need to toggle this setting based on some user input.
+i18n.setLocale('en');
 
 function waitForDocType(db, type, rev, text){
 	let docId;
@@ -230,21 +244,21 @@ describe('Test the NLC interaction', function(){
 			});
 
 		});
-		context('user asks for classifier status', function() {
-			it('should reply with slack attachment with available classifier', function(done){
-				room.robot.on('ibmcloud.formatter', function(event) {
-					if (event.attachments && event.attachments.length >= 1){
-						expect(event.attachments.length).to.eql(1);
-						expect(event.attachments[0].title).to.eql('test-classifier');
-						expect(event.attachments[0].fields[0].value).to.eql('Available');
-						done();
-					}
-				});
-				room.user.say('mimiron', '@hubot nlc status').then();
-			});
-		});
 	});
 
+	describe('user asks for classifier status', function() {
+		it('should reply with slack attachment with available classifier', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(1);
+					expect(event.attachments[0].title).to.eql('test-classifier');
+					expect(event.attachments[0].fields[0].value).to.eql('Available');
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc status').then();
+		});
+	});
 
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
@@ -284,6 +298,15 @@ describe('Test the NLC interaction', function(){
 					done();
 				});
 			});
+		});
+
+		it('should not check status of classifier when environment is not set', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.status.not.configured'));
+				done();
+			});
+			room.user.say('mimiron', '@hubot nlc status').then();
 		});
 	});
 
