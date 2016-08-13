@@ -92,7 +92,7 @@ module.exports = function(robot) {
 		var regex = new RegExp(`([0-${nOpts}]+)`);
 
 		utils.getExpectedResponse(res, robot, switchBoard, prompt, regex).then((result) => {
-			var response = result.message.rawText ? result.message.rawText.trim() : result.message.text.trim();
+			var response = result.match[1];
 			var resNum = parseInt(response, 10);
 			if (resNum < nOpts){
 				var selectedClass = classification.classes[resNum].class_name;
