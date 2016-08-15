@@ -29,10 +29,20 @@
 	      "emittarget": "nlc.train.js",
 	      "texts": [
 			"Start a training session.",
-			"Can you go training?",
-			"Please start training.",
+			"Go train",
+			"Start training",
 			"train"
 		  ]
-	    }
+		},
+		{
+		"class": "nlc.status",
+		"description": "Show the status for the natural language classifier",
+	  	"emittarget": "nlc.status.js",
+	  	"texts": [
+			"Provide the status for my classifier",
+			"Obtain the status of classifier",
+			"What is the status of nlc?"
+	  		]
+		}
 	]
 }
