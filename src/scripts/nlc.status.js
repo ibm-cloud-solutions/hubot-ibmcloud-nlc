@@ -81,11 +81,11 @@ module.exports = function(robot) {
 				let prompt = i18n.__('nlc.status.prompt');
 				let negativeResponse = i18n.__('nlc.status.safe');
 				utils.getConfirmedResponse(res, switchBoard, prompt, negativeResponse).then((result) => {
+					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.new.session')});
 					watsonServices.nlc.train().then(function(trainingResult){
-						robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.status.now.training')});
 						return watsonServices.nlc.monitorTraining(trainingResult.classifier_id);
 					}).then(function(result){
-						res.reply(result.status_description);
+						robot.emit('ibmcloud.formatter', { response: res, message: res.status_description});
 					}).catch(function(err){
 						robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
 					});
@@ -93,7 +93,7 @@ module.exports = function(robot) {
 			});
 		}
 		else {
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.status.not.configured')});
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.not.configured')});
 			robot.logger.error(`${TAG} NLC is not configured.`);
 		}
 	}

@@ -22,6 +22,7 @@ const mockClassifierStatusAvailable = require(path.resolve(__dirname, 'resources
 
 module.exports = {
 	setupMockery: function() {
+		nock.cleanAll();
 		nock.disableNetConnect();
 
 		let nlcScope = nock(nlcEndpoint).persist();
@@ -29,7 +30,7 @@ module.exports = {
 		// Mock route to list all classifiers.
 		nlcScope.get('/v1/classifiers')
 		.reply(200, function(){
-			return mockClassifierList;
+			return mockClassifierList.classifierList;
 		});
 
 		// Mock route for classifier status.
@@ -95,5 +96,18 @@ module.exports = {
 			text: 'high confidence result'
 		})
 		.reply(500, 'Some 500 error message from the NLC service.');
+	},
+
+	setupMockStatus: function(){
+		nock.cleanAll();
+		nock.disableNetConnect();
+
+		let nlcStatusScope = nock(nlcEndpoint).persist();
+
+		// Mock route to empty list of classifiers.
+		nlcStatusScope.get('/v1/classifiers')
+		.reply(200, function(){
+			return mockClassifierList.emptyList;
+		});
 	}
 };

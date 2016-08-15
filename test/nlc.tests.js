@@ -12,8 +12,6 @@ const sprinkles = require('mocha-sprinkles');
 const helper = new Helper('../src/scripts');
 const mockNLP = require('./nlc.mock');
 const env = require('../src/lib/env');
-const path = require('path');
-const appRoot = require('app-root-path');
 
 const timeout = 5000;
 
@@ -21,7 +19,7 @@ const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
-	directory: path.join(appRoot.toString(), 'src', 'messages'),
+	directory: __dirname + '/../src/messages',
 	defaultLocale: 'en',
 	// Prevent messages file from being overwritten in error conditions (like poor JSON).
 	updateFiles: false
@@ -271,7 +269,7 @@ describe('Test the NLC interaction', function(){
 				}).then(() => false).catch(() => true).then((success) => {
 
 					expect(room.messages.length).to.eql(4);
-					expect(room.messages[3][1]).to.eql('@mimiron Ok, I\'m going to start a new training session. Training a classifier takes about 15 minutes.');
+					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.new.session')}`);
 					done();
 				});
 			});
@@ -294,7 +292,7 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 					expect(room.messages.length).to.eql(2);
-					expect(room.messages[1][1]).to.eql('Your request didn\'t match any supported actions.  To see what I can do type `help`.');
+					expect(room.messages[1][1]).to.eql(i18n.__('nlc.no.match'));
 					done();
 				});
 			});
@@ -303,10 +301,26 @@ describe('Test the NLC interaction', function(){
 		it('should not check status of classifier when environment is not set', function(done){
 			room.robot.on('ibmcloud.formatter', function(event) {
 				expect(event.message).to.be.a('string');
-				expect(event.message).to.contain(i18n.__('nlc.status.not.configured'));
+				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
 			room.user.say('mimiron', '@hubot nlc status').then();
+		});
+
+		it('should not train classifier when environment is not set', function(done){
+			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+				room.user.say('mimiron', 'yes');
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 4){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+
+					expect(room.messages.length).to.eql(4);
+					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.not.configured')}`);
+					done();
+				});
+			});
 		});
 	});
 
@@ -324,11 +338,54 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 					expect(room.messages.length).to.eql(3);
-					expect(room.messages[1][1]).to.eql('I\'m having trouble processing natural language requests.  If the problem persist contact your bot administrator.');
-					expect(room.messages[2][1]).to.eql('In the meantime type `help` for a list of available commands.');
+					expect(room.messages[1][1]).to.eql(i18n.__('nlc.error.unexpected.general'));
+					expect(room.messages[2][1]).to.eql(i18n.__('nlc.error.fallback'));
 					done();
 				});
 			});
+		});
+	});
+});
+
+describe('Test NLC status', function(){
+	let room;
+
+	before(function() {
+		mockNLP.setupMockStatus();
+	});
+
+	beforeEach(function() {
+		room = helper.createRoom();
+	});
+
+	afterEach(function() {
+		room.destroy();
+	});
+
+	it('should prompt user to start training then handle negative response', function(done){
+		room.user.say('mimiron', 'hubot nlc status').then(() => {
+			room.user.say('mimiron', 'no');
+			return sprinkles.eventually({ timeout: timeout }, function(){
+				if (room.messages.length < 4){
+					throw new Error('too soon');
+				}
+			}).then(() => false).catch(() => true).then((success) => {
+				expect(room.messages.length).to.eql(4);
+				expect(room.messages[1][1]).to.eql(`@mimiron ${i18n.__('nlc.status.prompt')}`);
+				expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.status.safe')}`);
+				done();
+			});
+		});
+	});
+
+	it('should prompt user to start training then handle positive response', function(done){
+		room.robot.on('ibmcloud.formatter', function(event) {
+			expect(event.message).to.be.a('string');
+			expect(event.message).to.contain(i18n.__('nlc.train.new.session'));
+			done();
+		});
+		room.user.say('mimiron', 'hubot nlc status').then(() => {
+			room.user.say('mimiron', 'yes').then();
 		});
 	});
 });

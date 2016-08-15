@@ -6,18 +6,16 @@
  */
 'use strict';
 
-const path = require('path');
 const expect = require('chai').expect;
 const Helper = require('hubot-test-helper');
 const helper = new Helper('../src/scripts');
 const mockUtils = require('./nlc.mock');
-const appRoot = require('app-root-path');
 
 const i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
-	directory: path.join(appRoot.toString(), 'src', 'messages'),
+	directory: __dirname + '/../src/messages',
 	defaultLocale: 'en',
 	// Prevent messages file from being overwritten in error conditions (like poor JSON).
 	updateFiles: false
