@@ -20,7 +20,6 @@
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type `help`.",
 
   "nlc.status.prompt": "You do not have any classifiers. Would you like to start training one?",
-  "nlc.status.safe": "Alright, maybe next time!",
 
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."

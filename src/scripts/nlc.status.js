@@ -79,7 +79,7 @@ module.exports = function(robot) {
 					robot.logger.info(`${TAG} ${err}.`);
 				}
 				let prompt = i18n.__('nlc.status.prompt');
-				let negativeResponse = i18n.__('nlc.status.safe');
+				let negativeResponse = i18n.__('nlc.train.decline');
 				utils.getConfirmedResponse(res, switchBoard, prompt, negativeResponse).then((result) => {
 					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.new.session')});
 					watsonServices.nlc.train().then(function(trainingResult){

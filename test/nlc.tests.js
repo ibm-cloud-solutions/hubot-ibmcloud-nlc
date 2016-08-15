@@ -372,7 +372,7 @@ describe('Test NLC status', function(){
 			}).then(() => false).catch(() => true).then((success) => {
 				expect(room.messages.length).to.eql(4);
 				expect(room.messages[1][1]).to.eql(`@mimiron ${i18n.__('nlc.status.prompt')}`);
-				expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.status.safe')}`);
+				expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.decline')}`);
 				done();
 			});
 		});
