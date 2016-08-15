@@ -46,7 +46,7 @@ module.exports = function(robot) {
 		training: '#ef4e38'
 	};
 
-  	// Natural Language match
+	// Natural Language match
 	robot.on('nlc.status', (res, parameters) => {
 		robot.logger.debug(`${TAG}: nlc.status - Natural Language match.`);
 		getStatus(res);
