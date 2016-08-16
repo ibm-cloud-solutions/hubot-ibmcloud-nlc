@@ -11,7 +11,6 @@ var TAG = path.basename(__filename);
 const utils = require('hubot-ibmcloud-utils').utils;
 const Conversation = require('hubot-conversation');
 const env = require('./env.js');
-const Promise = require('bluebird');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -121,12 +120,14 @@ module.exports.validateParameters = function(robot, res, paramManager, className
 
 			// If there are missing parameter values, then attempt to extract the values.
 			if (missingClassParameters.length > 0) {
-				Promise.cast(missingClassParameters).reduce(function(stuff, missingClassParameter) {
-					robot.logger.info(`${TAG}: Using dialogs to obtain parameter value for parameter ${missingClassParameter.name}.`);
-					return extractParameter(robot, res, switchBoard, paramManager, className, missingClassParameter).then(function(missingValue) {
+				var prom = Promise.resolve();
+				return missingClassParameters.reduce(function(p, missingClassParameter) {
+					return p.then(function() {
+						return extractParameter(robot, res, switchBoard, paramManager, className, missingClassParameter);
+					}).then(function(missingValue) {
 						if (missingValue) parameters[missingClassParameter.name] = missingValue;
 					});
-				}, 0).then(function() {
+				}, prom).then(function() {
 					resolve(parameters);
 				}).catch(function(err) {
 					reject(err);
