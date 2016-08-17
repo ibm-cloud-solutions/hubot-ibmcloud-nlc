@@ -19,6 +19,7 @@ const mockNegFbResult = require(path.resolve(__dirname, 'resources', 'mock.class
 
 const mockClassifierList = require(path.resolve(__dirname, 'resources', 'mock.classifierList.json'));
 const mockClassifierStatusAvailable = require(path.resolve(__dirname, 'resources', 'mock.classifierAvailable.json'));
+const mockClassifierStatusTraining = require(path.resolve(__dirname, 'resources', 'mock.classifierTraining.json'));
 
 module.exports = {
 	setupMockery: function() {
@@ -36,6 +37,10 @@ module.exports = {
 		// Mock route for classifier status.
 		nlcScope.get('/v1/classifiers/cd02b5x110-nlc-5103')
 		.reply(200, mockClassifierStatusAvailable);
+
+		// Mock route for classifier status.
+		nlcScope.get('/v1/classifiers/cd02b5x110-nlc-5104')
+		.reply(200, mockClassifierStatusTraining);
 
 		// Mock route to get classification data.
 		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', function(body) {
@@ -98,7 +103,7 @@ module.exports = {
 		.reply(500, 'Some 500 error message from the NLC service.');
 	},
 
-	setupMockStatus: function(){
+	setupMockEmpty: function(){
 		nock.cleanAll();
 		nock.disableNetConnect();
 

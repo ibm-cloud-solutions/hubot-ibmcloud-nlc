@@ -43,6 +43,16 @@
 			"Obtain the status of classifier",
 			"What is the status of nlc?"
 	  		]
+		},
+		{
+		"class": "nlc.list",
+		"description": "List all classifiers with their status",
+	  	"emittarget": "nlc.list.js",
+	  	"texts": [
+			"List my classifiers",
+			"Show me my classifiers",
+			"List all nlc"
+	  		]
 		}
 	]
 }

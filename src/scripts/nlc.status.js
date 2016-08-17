@@ -60,36 +60,53 @@ module.exports = function(robot) {
 
 	function getStatus(res) {
 		if (env.nlc_enabled) {
-			watsonServices.nlc.classifierStatus().then((classifier) => {
-				var color = classifier.status === 'Available' ? COLORS.available : COLORS.training;
+			watsonServices.nlc.classifierList().then((list) => {
+				// Filter classifiers that match Hubot NLC classifier name (default is default-hubot-classifer)
+				var filteredClassifiers = list.filter((classifier) => {
+					return classifier.name === env.nlc_classifier;
+				});
 
-				robot.emit('ibmcloud.formatter', {
-					response: res,
-					attachments: [{
-						title: classifier.name,
-						color: color,
-						fields: [
-							{title: 'status', value: classifier.status, short: true},
-							{title: 'id', value: classifier.classifier_id, short: true}
-						]
-					}]
-				});
-			}).catch((err) => {
-				if (err) {
-					robot.logger.info(`${TAG} ${err}.`);
-				}
-				let prompt = i18n.__('nlc.status.prompt');
-				let negativeResponse = i18n.__('nlc.train.decline');
-				utils.getConfirmedResponse(res, switchBoard, prompt, negativeResponse).then((result) => {
-					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.new.session')});
-					watsonServices.nlc.train().then(function(trainingResult){
-						return watsonServices.nlc.monitorTraining(trainingResult.classifier_id);
-					}).then(function(result){
-						robot.emit('ibmcloud.formatter', { response: res, message: res.status_description});
-					}).catch(function(err){
-						robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
+				// Respond with most recent Available/Training classifier
+				if (filteredClassifiers.length > 0) {
+					var classifier = filteredClassifiers[0];
+					robot.emit('ibmcloud.formatter', {
+						response: res,
+						attachments: [{
+							title: classifier.name,
+							color: classifier.status === 'Available' ? COLORS.available : COLORS.training,
+							fields: [
+								{title: 'status', value: classifier.status, short: true},
+								{title: 'id', value: classifier.classifier_id, short: true},
+								{title: 'created', value: (new Date(classifier.created)).toString()}
+							]
+						}]
 					});
-				});
+
+					// Check for new Training classifier and notify how long it's been training for
+					for (var i = 0; i < filteredClassifiers.length; i++) {
+						if (filteredClassifiers[i].status === 'Training') {
+							var message = i18n.__('nlc.status.other.training', filteredClassifiers[i].duration);
+							robot.emit('ibmcloud.formatter', {response: res, message: message});
+							break;
+						}
+					}
+				}
+				else {
+					let prompt = i18n.__('nlc.status.prompt', env.nlc_classifier);
+					let negativeResponse = i18n.__('nlc.train.decline');
+					utils.getConfirmedResponse(res, switchBoard, prompt, negativeResponse).then((result) => {
+						robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.new.session')});
+						watsonServices.nlc.train().then(function(trainingResult){
+							return watsonServices.nlc.monitorTraining(trainingResult.classifier_id);
+						}).then(function(result){
+							robot.emit('ibmcloud.formatter', { response: res, message: res.status_description});
+						}).catch(function(err){
+							robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
+						});
+					});
+				}
+			}).catch((err) => {
+				robot.logger.error(`${TAG} Error while listing clasifier status. Error=${JSON.stringify(err, null, 2)}`);
 			});
 		}
 		else {

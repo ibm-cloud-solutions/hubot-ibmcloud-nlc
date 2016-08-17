@@ -19,7 +19,10 @@
   "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type `help`.",
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type `help`.",
 
-  "nlc.status.prompt": "You do not have any classifiers. Would you like to start training one?",
+  "nlc.status.prompt": "You do not have any classifiers under *%s*. Would you like to start training one?",
+  "nlc.status.train.duration": "Classifier has been training for %s minute(s).",
+  "nlc.status.other.training": "You have a new classifier that has been training for %s minute(s).",
+  "nlc.list.no.classifiers": "No classifiers found.",
 
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."

@@ -7,6 +7,13 @@
 				"name": "test-classifier",
 				"language": "en",
 				"created": "2016-06-29T15:24:48.919Z"
+			},
+			{
+				"classifier_id": "cd02b5x110-nlc-5104",
+				"url": "https://testClassifierUrl",
+				"name": "test-classifier",
+				"language": "en",
+				"created": "2016-06-29T15:24:48.920Z"
 			}
 		]
 	},

@@ -52,4 +52,20 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			room.robot.emit('nlc.status', res, {});
 		});
 	});
+
+	context('user asks for classifier list', function() {
+		it('should reply with slack attachment with list of classifiers', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(2);
+					expect(event.attachments[0].title).to.eql('test-classifier');
+					expect(event.attachments[0].fields[0].value).to.eql('Available');
+					expect(event.attachments[1].fields[0].value).to.eql('Training');
+					done();
+				}
+			});
+			var res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.list', res, {});
+		});
+	});
 });
