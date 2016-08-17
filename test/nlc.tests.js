@@ -273,6 +273,21 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
+	describe('user asls for nlc help', function() {
+		it('should respond with help', function(done) {
+			room.robot.on('ibmcloud.formatter', (event) => {
+				if (event.message) {
+					expect(event.message).to.be.a('string');
+					expect(event.message).to.contain(i18n.__('nlc.help.status'));
+					expect(event.message).to.contain(i18n.__('nlc.help.list'));
+					expect(event.message).to.contain(i18n.__('nlc.help.train'));
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc help').then();
+		});
+	});
+
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
 			room.user.say('mimiron', 'hubot nlc:train').then(() => {
