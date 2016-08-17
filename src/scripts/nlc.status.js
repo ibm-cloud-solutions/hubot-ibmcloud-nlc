@@ -67,7 +67,6 @@ module.exports = function(robot) {
 					return classifier.name === env.nlc_classifier;
 				});
 
-
 				// Respond with most recent Available/Training classifier
 				if (filteredClassifiers.length > 0) {
 					var classifier = filteredClassifiers[0];
@@ -118,7 +117,6 @@ module.exports = function(robot) {
 						});
 					});
 				}
-
 			}).catch((err) => {
 				robot.logger.error(`${TAG} Error while listing clasifier status. Error=${JSON.stringify(err, null, 2)}`);
 			});
