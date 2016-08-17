@@ -49,7 +49,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'status of my classifier', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.status', res, {});
+			room.robot.emit('nlc.status.js', res, {});
 		});
 	});
 
@@ -65,7 +65,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.list', res, {});
+			room.robot.emit('nlc.list.js', res, {});
 		});
 	});
 
@@ -82,7 +82,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			});
 
 			var res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.management.help', res, {});
+			room.robot.emit('nlc.management.help.js', res, {});
 		});
 	});
 
