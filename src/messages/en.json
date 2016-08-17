@@ -9,28 +9,25 @@
   "nlc.error.fallback": "In the meantime type `help` for a list of available commands.",
   "nlc.error.unexpected.general": "I'm having trouble processing natural language requests.  If the problem persist contact your bot administrator.",
   "nlc.save.error": "I am unable to save this item at this time.",
-
   "nlc.process.error": "Sorry, I was unable to process your response.",
   "nlc.feedback.negative": "Sorry I misunderstood you. I'll report this mistake. Can you repeat your request in a different way?",
+
   "nlc.train.prompt": "Do you want to start a new training session?",
   "nlc.train.decline": "Ok, I won't train for now.",
   "nlc.train.new.session": "Ok, I'm going to start a new training session. Training a classifier takes about 15 minutes.",
   "nlc.train.not.configured" : "I'm unable to start a new training session because the Natural Language service hasn't been configured.",
-  "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type `help`.",
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type `help`.",
-
 
   "nlc.status.train.duration": "Classifier has been training for %s minute(s).",
   "nlc.status.new.statements": "I have *%s* new approved training statements. To start a new training session with these statements just ask me or type `nlc train`",
   "nlc.status.no.statements": "I don't have any new approved training statements.",
   "nlc.status.other.training": "You have a new classifier that has been training for %s minute(s).",
   "nlc.status.prompt": "You do not have any classifiers under *%s*. Would you like to start training one?",
-
   "nlc.list.no.classifiers": "No classifiers found.",
 
-	"nlc.help.list": "List all the classifiers in the NLC instance.",
-	"nlc.help.status": "Show current status of the Hubot NLC classifier.",
-	"nlc.help.train": "Retrain the Hubot NLC classifier.",
+  "nlc.help.list": "List all the classifiers in the NLC instance.",
+  "nlc.help.status": "Show current status of the Hubot NLC classifier.",
+  "nlc.help.train": "Retrain the Hubot NLC classifier.",
 
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."

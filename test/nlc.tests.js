@@ -273,7 +273,7 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
-	describe('user asls for nlc help', function() {
+	describe('user asks for nlc help', function() {
 		it('should respond with help', function(done) {
 			room.robot.on('ibmcloud.formatter', (event) => {
 				if (event.message) {
