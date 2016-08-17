@@ -258,6 +258,21 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
+	describe('user asks for classifier list', function() {
+		it('should reply with slack attachment with list of classifers', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(2);
+					expect(event.attachments[0].title).to.eql('test-classifier');
+					expect(event.attachments[0].fields[0].value).to.eql('Available');
+					expect(event.attachments[1].fields[0].value).to.eql('Training');
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc list').then();
+		});
+	});
+
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
 			room.user.say('mimiron', 'hubot nlc:train').then(() => {
@@ -268,7 +283,7 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 
-					expect(room.messages.length).to.eql(4);
+					expect(room.messages.length).to.eql(5);
 					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.new.session')}`);
 					done();
 				});
@@ -305,6 +320,15 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', '@hubot nlc status').then();
+		});
+
+		it('should not list classifiers when environment is not set', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
+				done();
+			});
+			room.user.say('mimiron', '@hubot nlc list').then();
 		});
 
 		it('should not train classifier when environment is not set', function(done){
@@ -345,47 +369,46 @@ describe('Test the NLC interaction', function(){
 			});
 		});
 	});
-});
 
-describe('Test NLC status', function(){
-	let room;
+	describe('Test NLC with empty classifier list', function(){
+		before(function() {
+			mockNLP.setupMockEmpty();
+		});
 
-	before(function() {
-		mockNLP.setupMockStatus();
-	});
-
-	beforeEach(function() {
-		room = helper.createRoom();
-	});
-
-	afterEach(function() {
-		room.destroy();
-	});
-
-	it('should prompt user to start training then handle negative response', function(done){
-		room.user.say('mimiron', 'hubot nlc status').then(() => {
-			room.user.say('mimiron', 'no');
-			return sprinkles.eventually({ timeout: timeout }, function(){
-				if (room.messages.length < 4){
-					throw new Error('too soon');
-				}
-			}).then(() => false).catch(() => true).then((success) => {
-				expect(room.messages.length).to.eql(4);
-				expect(room.messages[1][1]).to.eql(`@mimiron ${i18n.__('nlc.status.prompt', 'test-classifier')}`);
-				expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.decline')}`);
-				done();
+		it('should prompt user to start training then handle negative response', function(done){
+			room.user.say('mimiron', 'hubot nlc status').then(() => {
+				room.user.say('mimiron', 'no');
+				return sprinkles.eventually({ timeout: timeout }, function(){
+					if (room.messages.length < 4){
+						throw new Error('too soon');
+					}
+				}).then(() => false).catch(() => true).then((success) => {
+					expect(room.messages.length).to.eql(4);
+					expect(room.messages[1][1]).to.eql(`@mimiron ${i18n.__('nlc.status.prompt', 'test-classifier')}`);
+					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.decline')}`);
+					done();
+				});
 			});
 		});
-	});
 
-	it('should prompt user to start training then handle positive response', function(done){
-		room.robot.on('ibmcloud.formatter', function(event) {
-			expect(event.message).to.be.a('string');
-			expect(event.message).to.contain(i18n.__('nlc.train.new.session'));
-			done();
+		it('should prompt user to start training then handle positive response', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.train.new.session'));
+				done();
+			});
+			room.user.say('mimiron', 'hubot nlc status').then(() => {
+				room.user.say('mimiron', 'yes').then();
+			});
 		});
-		room.user.say('mimiron', 'hubot nlc status').then(() => {
-			room.user.say('mimiron', 'yes').then();
+
+		it('should respond with no classifiers to list message', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.list.no.classifiers'));
+				done();
+			});
+			room.user.say('mimiron', 'hubot nlc list').then();
 		});
 	});
 });

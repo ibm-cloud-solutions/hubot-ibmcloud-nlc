@@ -1,0 +1,10 @@
+{
+  "classifier_id": "cd02b5x110-nlc-5104",
+  "name": "test-classifier",
+  "language": "en",
+  "created": "2016-06-29T19:09:59.000Z",
+  "url": "https://testClassifierUrl",
+  "status": "Training",
+	"duration": "50000",
+  "status_description": "The classifier instance is training."
+}
