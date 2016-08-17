@@ -290,7 +290,7 @@ describe('Test the NLC interaction', function(){
 
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
-			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 4){
@@ -347,7 +347,7 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should not train classifier when environment is not set', function(done){
-			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 4){
