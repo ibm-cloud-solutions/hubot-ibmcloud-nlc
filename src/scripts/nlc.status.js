@@ -79,7 +79,7 @@ module.exports = function(robot) {
 				return nlcconfig.getAllClasses(new Date(classifier.created));
 
 			}).then((classes) => {
-				let msg = classes.length == 0 ? i18n.__('nlc.status.no.statements') : i18n.__('nlc.status.new.statements', classes.length);
+				let msg = classes.length === 0 ? i18n.__('nlc.status.no.statements') : i18n.__('nlc.status.new.statements', classes.length);
 				robot.emit('ibmcloud.formatter', {
 					response: res,
 					message: msg
