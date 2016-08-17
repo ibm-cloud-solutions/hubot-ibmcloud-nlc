@@ -7,8 +7,7 @@
   "nlc.confidence.high.process": "[High confidence] Will process top class [%s]",
 
   "nlc.error.fallback": "In the meantime type `help` for a list of available commands.",
-  "nlc.error.unexpected.general": "I'm having trouble processing natural language requests.  If the problem persist contact your bot administrator.",
-  "nlc.save.error": "I am unable to save this item at this time.",
+  "nlc.error.unexpected.general": "I'm having trouble processing natural language requests. If the problem persist contact your bot administrator.",
   "nlc.process.error": "Sorry, I was unable to process your response.",
   "nlc.feedback.negative": "Sorry I misunderstood you. I'll report this mistake. Can you repeat your request in a different way?",
 
