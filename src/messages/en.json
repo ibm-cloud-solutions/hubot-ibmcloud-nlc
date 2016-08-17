@@ -21,7 +21,7 @@
 
 
   "nlc.status.train.duration": "Classifier has been training for %s minute(s).",
-  "nlc.status.new.statements": "I have *%s* new approved training statements. To start a new training sesion with these statements just ask me or type `nlc train`",
+  "nlc.status.new.statements": "I have *%s* new approved training statements. To start a new training session with these statements just ask me or type `nlc train`",
   "nlc.status.no.statements": "I don't have any new approved training statements.",
   "nlc.status.other.training": "You have a new classifier that has been training for %s minute(s).",
   "nlc.status.prompt": "You do not have any classifiers under *%s*. Would you like to start training one?",
