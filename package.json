@@ -3,7 +3,7 @@
   "version": "0.0.30",
   "description": "Adds Natural Language capabilities to Hubot",
   "main": "index.js",
-  "respository": {
+  "repository": {
     "url": "https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc",
     "type": "git"
   },

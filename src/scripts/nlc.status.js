@@ -19,6 +19,7 @@ const env = require('../lib/env');
 const utils = require('hubot-ibmcloud-utils').utils;
 const Conversation = require('hubot-conversation');
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
+const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -74,6 +75,16 @@ module.exports = function(robot) {
 						]
 					}]
 				});
+
+				return nlcconfig.getAllClasses(new Date(classifier.created));
+
+			}).then((classes) => {
+				let msg = classes.length == 0 ? i18n.__('nlc.status.no.statements') : i18n.__('nlc.status.new.statements', classes.length);
+				robot.emit('ibmcloud.formatter', {
+					response: res,
+					message: msg
+				});
+
 			}).catch((err) => {
 				if (err) {
 					robot.logger.info(`${TAG} ${err}.`);
