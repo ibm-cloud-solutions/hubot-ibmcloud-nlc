@@ -18,9 +18,10 @@
 	      "description": "Get help for managing classifiers",
 	      "emittarget": "nlc.management.help.js",
 	      "texts": [
-			"Can you help me with nlc?",
-			"Help me with my classifiers",
-			"I need help with nlc"
+			"Help me with nlc",
+			"Need assitance with natural language",
+			"help classifiers",
+			"help natural language"
 		  ]
 	    },
 	    {
