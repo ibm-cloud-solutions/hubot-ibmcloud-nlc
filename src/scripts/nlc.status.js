@@ -48,7 +48,7 @@ module.exports = function(robot) {
 	};
 
 	// Natural Language match
-	robot.on('nlc.status', (res, parameters) => {
+	robot.on(path.basename(__filename), (res, parameters) => {
 		robot.logger.debug(`${TAG}: nlc.status - Natural Language match.`);
 		getStatus(res);
 	});

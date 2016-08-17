@@ -37,7 +37,7 @@ const NLC_HELP = /nlc (help)$/i;
 
 module.exports = (robot) => {
 	// Natural Language match
-	robot.on('nlc.management.help', (res, parameters) => {
+	robot.on(path.basename(__filename), (res, parameters) => {
 		robot.logger.debug(`${TAG}: Natural Language match. res.message.text=${res.message.text}.`);
 		getHelp(robot, res);
 	});
