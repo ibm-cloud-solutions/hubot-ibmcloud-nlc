@@ -9,15 +9,19 @@
 //
 // Author:
 //   jpadilla
+//	 reicruz
 //
 'use strict';
+
+var path = require('path');
+var TAG = path.basename(__filename);
 
 // --------------------------------------------------------------
 // i18n (internationalization)
 // It will read from a peer messages.json file.  Later, these
 // messages can be referenced throughout the module.
 // --------------------------------------------------------------
-const i18n = new (require('i18n-2'))({
+var i18n = new (require('i18n-2'))({
 	locales: ['en'],
 	extension: '.json',
 	// Add more languages to the list of locales when the files are created.
@@ -29,16 +33,28 @@ const i18n = new (require('i18n-2'))({
 // At some point we need to toggle this setting based on some user input.
 i18n.setLocale('en');
 
+const NLC_HELP = /nlc (help)$/i;
 
-// ----------------------------------------------------
-// Start of the HUBOT interactions.
-// ----------------------------------------------------
-var path = require('path');
-
-module.exports = function(robot) {
-
-	robot.on(path.basename(__filename), (res) => {
-		robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.help')});
+module.exports = (robot) => {
+	// Natural Language match
+	robot.on(path.basename(__filename), (res, parameters) => {
+		robot.logger.debug(`${TAG}: Natural Language match. res.message.text=${res.message.text}.`);
+		getHelp(robot, res);
 	});
 
+	// RegEx match
+	robot.respond(NLC_HELP, {id: 'nlc.management.help'}, function(res) {
+		robot.logger.debug(`${TAG}: RegEx match. res.message.text=${res.message.text}.`);
+		getHelp(robot, res);
+	});
+
+
+	function getHelp(robot, res) {
+		let help = `${robot.name} nlc status - ` + i18n.__('nlc.help.status') + '\n';
+		help += `${robot.name} nlc list|show  - ` + i18n.__('nlc.help.list') + '\n';
+		help += `${robot.name} nlc train|retrain  - ` + i18n.__('nlc.help.train') + '\n';
+
+		let message = '\n' + help;
+		robot.emit('ibmcloud.formatter', {response: res, message: message});
+	};
 };

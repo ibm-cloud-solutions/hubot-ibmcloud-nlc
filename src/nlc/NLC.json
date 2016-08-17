@@ -13,6 +13,17 @@
 			"help"
 		  ]
 	    },
+			{
+	      "class": "nlc.management.help",
+	      "description": "Get help for managing classifiers",
+	      "emittarget": "nlc.management.help.js",
+	      "texts": [
+			"Help me with nlc",
+			"Need assitance with natural language",
+			"help classifiers",
+			"help natural language"
+		  ]
+	    },
 	    {
 	      "class": "nlc.feedback.negative",
 	      "description": "Report natural language misinterpretation",

@@ -40,16 +40,18 @@ const i18n = new (require('i18n-2'))({
 // At some point we need to toggle this setting based on some user input.
 i18n.setLocale('en');
 
-const TRAIN = /nlc:train/i;
+const TRAIN = /nlc (train|retrain)$/i;
 
 module.exports = function(robot) {
 	var switchBoard = new Conversation(robot);
 
 	robot.on(path.basename(__filename), (res) => {
+		robot.logger.debug(`${TAG}: nlc.train - Natural Language match.`);
 		train(res);
 	});
 
-	robot.respond(TRAIN, {id: 'bluemix.nlc.train'}, (res) => {
+	robot.respond(TRAIN, {id: 'nlc.train'}, (res) => {
+		robot.logger.debug(`${TAG}: nlc.train - RegEx match.`);
 		train(res);
 	});
 

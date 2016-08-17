@@ -43,7 +43,7 @@ module.exports = function(robot) {
 	};
 
 	// Natural Language match
-	robot.on('nlc.list', (res, parameters) => {
+	robot.on(path.basename(__filename), (res, parameters) => {
 		robot.logger.debug(`${TAG}: nlc.list - Natural Language match.`);
 		getClassifierList(res);
 	});

@@ -273,9 +273,24 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
+	describe('user asks for nlc help', function() {
+		it('should respond with help', function(done) {
+			room.robot.on('ibmcloud.formatter', (event) => {
+				if (event.message) {
+					expect(event.message).to.be.a('string');
+					expect(event.message).to.contain(i18n.__('nlc.help.status'));
+					expect(event.message).to.contain(i18n.__('nlc.help.list'));
+					expect(event.message).to.contain(i18n.__('nlc.help.train'));
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc help').then();
+		});
+	});
+
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
-			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 4){
@@ -332,7 +347,7 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should not train classifier when environment is not set', function(done){
-			room.user.say('mimiron', 'hubot nlc:train').then(() => {
+			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 4){
