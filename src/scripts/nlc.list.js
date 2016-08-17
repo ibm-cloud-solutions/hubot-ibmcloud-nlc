@@ -82,6 +82,8 @@ module.exports = function(robot) {
 						attachments
 					});
 				}
+			}).catch((err) => {
+				robot.logger.error(`${TAG} Error while listing classifiers. Error=${JSON.stringify(err, null, 2)}`);
 			});
 		}
 		else {

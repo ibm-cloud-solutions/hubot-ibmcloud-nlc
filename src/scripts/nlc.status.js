@@ -103,7 +103,7 @@ module.exports = function(robot) {
 					});
 				}
 			}).catch((err) => {
-				robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
+				robot.logger.error(`${TAG} Error while listing clasifier status. Error=${JSON.stringify(err, null, 2)}`);
 			});
 		}
 		else {
