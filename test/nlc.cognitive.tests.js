@@ -82,7 +82,22 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			});
 
 			var res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.help', res, {});
+			room.robot.emit('nlc.management.help', res, {});
+		});
+	});
+
+	context('user asks for general help', function() {
+		it('should respond with help', function(done) {
+			room.robot.on('ibmcloud.formatter', (event) => {
+				if (event.message) {
+					expect(event.message).to.be.a('string');
+					expect(event.message).to.contain(i18n.__('nlc.help'));
+					done();
+				}
+			});
+
+			var res = { message: {text: 'I need some help', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.help.js', res, {});
 		});
 	});
 });
