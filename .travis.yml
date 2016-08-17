@@ -8,3 +8,4 @@ script:
   - 'npm run coverage'
 notifications:
   slack: ${SLACK_TOKEN}
+  webhooks: http://cloud-solutions-travis.mybluemix.net/notifications
