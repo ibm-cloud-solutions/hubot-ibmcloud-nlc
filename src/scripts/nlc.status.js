@@ -61,10 +61,12 @@ module.exports = function(robot) {
 	function getStatus(res) {
 		if (env.nlc_enabled) {
 			watsonServices.nlc.classifierList().then((list) => {
+				// Filter classifiers that match Hubot NLC classifier name (default is default-hubot-classifer)
 				var filteredClassifiers = list.filter((classifier) => {
 					return classifier.name === env.nlc_classifier;
 				});
 
+				// Respond with most recent Available/Training classifier
 				if (filteredClassifiers.length > 0) {
 					var classifier = filteredClassifiers[0];
 					robot.emit('ibmcloud.formatter', {
@@ -80,6 +82,7 @@ module.exports = function(robot) {
 						}]
 					});
 
+					// Check for new Training classifier and notify how long it's been training for
 					for (var i = 0; i < filteredClassifiers.length; i++) {
 						if (filteredClassifiers[i].status === 'Training') {
 							var message = i18n.__('nlc.status.other.training', filteredClassifiers[i].duration);
