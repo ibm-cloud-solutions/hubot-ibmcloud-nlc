@@ -24,7 +24,6 @@
   "nlc.status.prompt": "You do not have any classifiers under *%s*. Would you like to start training one?",
   "nlc.list.no.classifiers": "No classifiers found.",
   "nlc.auto.approve.set": "Auto approve is set to *%s*.",
-  "nlc.auto.approve.prompt": "Would you like to turn auto approve *%s*?",
   "nlc.auto.approve.info": "You can toggle it on or off using *nlc auto approve [on|off|true|false]*",
 
   "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type `help`.",
