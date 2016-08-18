@@ -43,25 +43,25 @@ i18n.setLocale('en');
 module.exports = function(robot) {
 
 	robot.on(path.basename(__filename), (res, classification) => {
+		robot.logger.info(`${TAG} Low confidence detected`);
+		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.low.prompt')});
+
 		// promise result is cached
 		nlcDb.open().then((db) => {
-			robot.logger.info(`${TAG} Low confidence detected`);
 			handle(db, res, classification, robot);
 		}).catch((err) => {
-			robot.logger.error(err);
+			robot.logger.error(`${TAG} Error processing low confidence NLC result. Error=${err}`);
 		});
 	});
 
 	function handle(db, res, classification, robot){
-		let prompt = i18n.__('nlc.confidence.low.prompt');
-
+		// Record low confidence (unclassified) NLC result for feedback loop.
 		db.post(classification, 'unclassified').then((doc) => {
-			res.reply(prompt);
 			let userId = res.envelope.user.id;
 			utils.logMessage(robot, res, userId, null, doc.id);
+			robot.logger.debug(`${TAG} Saved low confidence (unclassified) NLC result for learning.`);
 		}).catch((err) => {
-			res.reply(i18n.__('nlc.save.error'));
-			robot.logger.error(err);
+			robot.logger.error(`${TAG} Error saving low confidence NLC feedback data. Error=${err}`);
 		});
 	}
 };

@@ -21,8 +21,7 @@
 
 const path = require('path');
 const TAG = path.basename(__filename);
-const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
-const constants = require(path.resolve(__dirname, '..', 'lib', 'constants'));
+const utils = require(path.resolve(__dirname, '..', 'lib', 'utils'));
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -42,39 +41,12 @@ const i18n = new (require('i18n-2'))({
 i18n.setLocale('en');
 
 module.exports = function(robot) {
+
 	robot.on(path.basename(__filename), (res, info) => {
 		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match. info=${JSON.stringify(info, null, 2)}`);
-		// promise result is cached
-		nlcDb.open().then((db) => {
-			handle(db, robot, res, info);
-		}).catch((err) => {
-			robot.logger.error(err);
-		});
+		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.feedback.negative')});
 
-		res.send(i18n.__('nlc.feedback.negative'));
+		// Save conversation to feedback DB.
+		utils.handleFeedback(robot, res, info);
 	});
-
-	function handle(db, robot, res, info){
-		if (info && info.id){
-			// low / med event log path
-			// save additional input texts to original 'target' document
-			db.get(info.id).then((doc) => {
-				doc.logs = info.logs;
-				return db.put(doc);
-			}).catch((err) => {
-				res.reply(i18n.__('nlc.save.error'));
-				robot.logger.error(err);
-			});
-		}
-		else {
-			// get user logs from the brain
-			let userId = res.envelope.user.id;
-			let key = userId + constants.LOGGER_KEY_SUFFIX;
-			let info = robot.brain.get(key);
-			if (info && info.logs){
-				return db.post(info.logs, 'negative_fb');
-			}
-		}
-	};
-
 };

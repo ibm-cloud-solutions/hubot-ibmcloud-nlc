@@ -47,50 +47,47 @@ module.exports = function(robot) {
 	let paramManager = new ParamManager();
 
 	robot.on(path.basename(__filename), (res, classification) => {
+		// TODO: Remove displaying of top classes and confidence back to user.
+		robot.logger.info(`${TAG} High confidence detected.`);
+		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.high.process', classification.top_class)});
+
 		// promise result is cached
 		nlcDb.open().then((db) => {
-			robot.logger.info(`${TAG} High confidence detected.`);
 			handle(db, res, classification, robot);
 		}).catch((err) => {
-			robot.logger.error(err);
+			robot.logger.error(`${TAG}: Error processing high confidence NLC for ${classification.top_class}. Error=${err}`);
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 		});
 	});
 
 
 	function handle(db, res, classification, robot){
-		// TODO: Remove displaying of top classes and confidence back to user.
-		res.send(i18n.__('nlc.confidence.high.process', classification.top_class));
-
-		// Record classification success for metrics.
-		db.post(classification, 'classified', classification.top_class).then(() => {
-
-			// Call emit target if specified with parameter values
-			nlcconfig.getClassEmitTarget(classification.top_class).then((tgt) => {
-				if (tgt) {
-					// Obtain statement from res removing the bot name
-					var text = res.message.text.replace(robot.name, '').trim();
-					paramManager.getParameters(classification.top_class, text, tgt.parameters).then((parameters) => {
-						extractParameters.validateParameters(robot, res, paramManager, classification.top_class, text, tgt.parameters, parameters).then((validParameters) => {
-							var authEmitParams = {
-								emitTarget: tgt.target,
-								emitParameters: validParameters
-							};
-							robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
-							robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
-						}).catch(function(error) {
-							robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-						});
-					}).catch(function(error) {
-						robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
+		// Call emit target if specified with parameter values
+		nlcconfig.getClassEmitTarget(classification.top_class).then((tgt) => {
+			if (tgt) {
+				// Obtain statement from res removing the bot name
+				var text = res.message.text.replace(robot.name, '').trim();
+				paramManager.getParameters(classification.top_class, text, tgt.parameters).then((parameters) => {
+					extractParameters.validateParameters(robot, res, paramManager, classification.top_class, text, tgt.parameters, parameters).then((validParameters) => {
+						var authEmitParams = {
+							emitTarget: tgt.target,
+							emitParameters: validParameters
+						};
+						robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
+						robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
 					});
-				}
-			}).catch((error) => {
-				robot.logger.error(`${TAG} Error occurred trying to obtain emit target for top class; top class = ${classification.top_class}; error = ${error}.`);
-			});
+				});
+			}
+		}).catch((error) => {
+			robot.logger.error(`${TAG} Error occurred trying to obtain emit target and parameters for top class; top class = ${classification.top_class}; error = ${error}.`);
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
+		});
 
+		// Record high confidence (classified) NLC result for feedback loop metrics.
+		db.post(classification, 'classified', classification.top_class).then(() => {
+			robot.logger.debug(`${TAG} Saved high confidence (classified) NLC result for feedback loop metrics.`);
 		}).catch((err) => {
-			res.reply(i18n.__('nlc.save.error'));
-			robot.logger.error(err);
+			robot.logger.error(`${TAG} Error saving high confidence (classified) NLC feedback data. Error=${err}`);
 		});
 	}
 };
