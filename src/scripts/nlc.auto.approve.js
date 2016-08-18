@@ -18,6 +18,7 @@
 
 const path = require('path');
 const TAG = path.basename(__filename);
+const env = require('../lib/env');
 const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
 
 // --------------------------------------------------------------
@@ -56,16 +57,22 @@ module.exports = function(robot) {
 	});
 
 	function updateAutoApprove(res, value){
-		var approve;
-		if (value) {
-			approve = ['on', 'true'].indexOf(value) > -1;
-			nlcconfig.setAutoApprove(approve);
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.auto.approve.set', approve)});
+		if (env.nlc_enabled) {
+			var approve;
+			if (value) {
+				approve = ['on', 'true'].indexOf(value) > -1;
+				nlcconfig.setAutoApprove(approve);
+				robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.auto.approve.set', approve)});
+			}
+			else {
+				approve = nlcconfig.getAutoApprove();
+				var message = `${i18n.__('nlc.auto.approve.set', approve)} ${i18n.__('nlc.auto.approve.info')}`;
+				robot.emit('ibmcloud.formatter', { response: res, message: message});
+			}
 		}
 		else {
-			approve = nlcconfig.getAutoApprove();
-			var message = `${i18n.__('nlc.auto.approve.set', approve)} ${i18n.__('nlc.auto.approve.info')}`;
-			robot.emit('ibmcloud.formatter', { response: res, message: message});
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.train.not.configured')});
+			robot.logger.error(`${TAG} NLC is not configured.`);
 		}
 	}
 };

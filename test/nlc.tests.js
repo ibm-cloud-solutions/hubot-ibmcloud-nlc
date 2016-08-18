@@ -346,6 +346,15 @@ describe('Test the NLC interaction', function(){
 			room.user.say('mimiron', '@hubot nlc list').then();
 		});
 
+		it('should not auto approve when environment is not set', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
+				done();
+			});
+			room.user.say('mimiron', '@hubot nlc auto approve').then();
+		});
+
 		it('should not train classifier when environment is not set', function(done){
 			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
@@ -424,6 +433,26 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', 'hubot nlc list').then();
+		});
+	});
+
+	describe('Test auto approve command', function(){
+		it('should succesfully turn auto approve off', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			room.user.say('mimiron', 'hubot nlc auto approve on').then();
+		});
+
+		it('should respond with auto approve value', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			room.user.say('mimiron', 'hubot nlc auto approve').then();
 		});
 	});
 });

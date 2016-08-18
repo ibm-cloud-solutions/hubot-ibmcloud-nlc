@@ -100,4 +100,26 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			room.robot.emit('nlc.help.js', res, {});
 		});
 	});
+
+	context('user toggles auto approve', function(){
+		it('should succesfully turn auto approve off', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			var res = { message: {text: 'turn auto approve off', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.auto.approve.js', res, { autoapprove: 'on' });
+		});
+
+		it('should respond with auto approve value', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			var res = { message: {text: 'auto approve setting', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.auto.approve.js', res, {});
+		});
+	});
 });
