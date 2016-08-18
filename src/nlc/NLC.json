@@ -64,6 +64,30 @@
 			"Show me my classifiers",
 			"List all nlc"
 	  		]
+		},
+		{
+		"class": "nlc.auto.approve",
+		"description": "Toggle auto approve setting for classifier training statements",
+			"emittarget": "nlc.auto.approve.js",
+			"texts": [
+			"Toggle auto approve",
+			"Automatically approve my statements",
+			"Turn auto approve on",
+			"Turn auto approve off"
+				],
+	       "parameters" : [
+			   {
+			       "name": "autoapprove",
+			       "type": "keyword",
+			       "prompt": "OK. Do you want auto approve on or off?"
+			   }
+	       ]
 		}
-	]
+	],
+   "parameter.values" : [
+       {
+           "name": "autoapprove",
+           "values": ["on", "off", "true", "false"]
+       }
+   ]
 }
