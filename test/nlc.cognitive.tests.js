@@ -49,7 +49,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'status of my classifier', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.status.js', res, {});
+			room.robot.emit('nlc.status', res, {});
 		});
 	});
 
@@ -65,7 +65,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.list.js', res, {});
+			room.robot.emit('nlc.list', res, {});
 		});
 	});
 
@@ -77,12 +77,13 @@ describe('Interacting with NLC commands via Natural Language', function() {
 					expect(event.message).to.contain(i18n.__('nlc.help.status'));
 					expect(event.message).to.contain(i18n.__('nlc.help.list'));
 					expect(event.message).to.contain(i18n.__('nlc.help.train'));
+					expect(event.message).to.contain(i18n.__('nlc.help.auto.approve'));
 					done();
 				}
 			});
 
 			var res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.management.help.js', res, {});
+			room.robot.emit('nlc.management.help', res, {});
 		});
 	});
 
@@ -97,7 +98,29 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			});
 
 			var res = { message: {text: 'I need some help', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.help.js', res, {});
+			room.robot.emit('nlc.help', res, {});
+		});
+	});
+
+	context('user toggles auto approve', function(){
+		it('should succesfully turn auto approve off', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			var res = { message: {text: 'turn auto approve off', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.auto.approve', res, { autoapprove: 'on' });
+		});
+
+		it('should respond with auto approve value', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
+				done();
+			});
+			var res = { message: {text: 'auto approve setting', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.auto.approve', res, {});
 		});
 	});
 });

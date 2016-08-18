@@ -46,7 +46,7 @@ module.exports = function(robot) {
 
 	let paramManager = new ParamManager();
 
-	robot.on(path.basename(__filename), (res, classification) => {
+	robot.on('nlc.confidence.high', (res, classification) => {
 		// TODO: Remove displaying of top classes and confidence back to user.
 		robot.logger.info(`${TAG} High confidence detected.`);
 		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.high.process', classification.top_class)});

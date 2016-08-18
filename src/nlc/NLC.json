@@ -5,7 +5,7 @@
 	    {
 	      "class": "nlc.help",
 	      "description": "Get help for using the bot",
-	      "emittarget": "nlc.help.js",
+	      "emittarget": "nlc.help",
 	      "texts": [
 			"How can you help me?",
 			"What can you do for me?",
@@ -16,7 +16,7 @@
 			{
 	      "class": "nlc.management.help",
 	      "description": "Get help for managing classifiers",
-	      "emittarget": "nlc.management.help.js",
+	      "emittarget": "nlc.management.help",
 	      "texts": [
 			"Help me with nlc",
 			"Need assitance with natural language",
@@ -27,7 +27,7 @@
 	    {
 	      "class": "nlc.feedback.negative",
 	      "description": "Report natural language misinterpretation",
-	      "emittarget": "nlc.feedback.negative.js",
+	      "emittarget": "nlc.feedback.negative",
 	      "texts": [
 			"That’s not what I asked for!",
 			"That’s incorrect.",
@@ -37,7 +37,7 @@
 	    {
 	      "class": "nlc.train",
 	      "description": "Train the natural language classifier",
-	      "emittarget": "nlc.train.js",
+	      "emittarget": "nlc.train",
 	      "texts": [
 			"Start a training session.",
 			"Go train",
@@ -48,7 +48,7 @@
 		{
 		"class": "nlc.status",
 		"description": "Show the status for the natural language classifier",
-	  	"emittarget": "nlc.status.js",
+	  	"emittarget": "nlc.status",
 	  	"texts": [
 			"Provide the status for my classifier",
 			"Obtain the status of classifier",
@@ -58,12 +58,36 @@
 		{
 		"class": "nlc.list",
 		"description": "List all classifiers with their status",
-	  	"emittarget": "nlc.list.js",
+	  	"emittarget": "nlc.list",
 	  	"texts": [
 			"List my classifiers",
 			"Show me my classifiers",
 			"List all nlc"
 	  		]
+		},
+		{
+		"class": "nlc.auto.approve",
+		"description": "Toggle auto approve setting for classifier training statements",
+			"emittarget": "nlc.auto.approve",
+			"texts": [
+			"Toggle auto approve",
+			"Automatically approve my statements",
+			"Turn auto approve on",
+			"Turn auto approve off"
+				],
+	       "parameters" : [
+			   {
+			       "name": "autoapprove",
+			       "type": "keyword",
+			       "prompt": "OK. Do you want auto approve on or off?"
+			   }
+	       ]
 		}
-	]
+	],
+   "parameter.values" : [
+       {
+           "name": "autoapprove",
+           "values": ["on", "off", "true", "false"]
+       }
+   ]
 }

@@ -42,7 +42,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	robot.on(path.basename(__filename), (res, classification) => {
+	robot.on('nlc.confidence.low', (res, classification) => {
 		robot.logger.info(`${TAG} Low confidence detected`);
 		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.low.prompt')});
 

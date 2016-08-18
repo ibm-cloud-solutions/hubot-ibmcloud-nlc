@@ -72,14 +72,14 @@ function processNLC(robot, text) {
 				// If high confidence emit to nlc.confidence.high.js to handle
 				if (response.classes[0].confidence > env.highThreshold){
 					resolve({
-						target: 'nlc.confidence.high.js',
+						target: 'nlc.confidence.high',
 						parameters: response
 					});
 				}
 				// If medium confidence emit to nlc.confidence.med.js to handle
 				else if (response.classes[0].confidence > env.lowThreshold && response.classes[0].confidence <= env.highThreshold){
 					resolve({
-						target: 'nlc.confidence.med.js',
+						target: 'nlc.confidence.med',
 						parameters: response
 					});
 				}
@@ -87,7 +87,7 @@ function processNLC(robot, text) {
 				// If low confidence emit to nlc.confidence.low.js to handle
 				else {
 					resolve({
-						target: 'nlc.confidence.low.js',
+						target: 'nlc.confidence.low',
 						parameters: response
 					});
 

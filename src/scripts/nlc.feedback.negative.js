@@ -42,7 +42,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	robot.on(path.basename(__filename), (res, info) => {
+	robot.on('nlc.feedback.negative', (res, info) => {
 		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match. info=${JSON.stringify(info, null, 2)}`);
 		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.feedback.negative')});
 

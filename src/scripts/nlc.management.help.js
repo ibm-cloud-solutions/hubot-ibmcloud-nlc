@@ -37,7 +37,7 @@ const NLC_HELP = /nlc (help)$/i;
 
 module.exports = (robot) => {
 	// Natural Language match
-	robot.on(path.basename(__filename), (res, parameters) => {
+	robot.on('nlc.management.help', (res, parameters) => {
 		robot.logger.debug(`${TAG}: Natural Language match. res.message.text=${res.message.text}.`);
 		getHelp(robot, res);
 	});
@@ -51,8 +51,9 @@ module.exports = (robot) => {
 
 	function getHelp(robot, res) {
 		let help = `${robot.name} nlc status - ` + i18n.__('nlc.help.status') + '\n';
-		help += `${robot.name} nlc list|show  - ` + i18n.__('nlc.help.list') + '\n';
-		help += `${robot.name} nlc train|retrain  - ` + i18n.__('nlc.help.train') + '\n';
+		help += `${robot.name} nlc list|show - ` + i18n.__('nlc.help.list') + '\n';
+		help += `${robot.name} nlc train|retrain - ` + i18n.__('nlc.help.train') + '\n';
+		help += `${robot.name} nlc auto approve [on|off|true|false] - ` + i18n.__('nlc.help.auto.approve') + '\n';
 
 		let message = '\n' + help;
 		robot.emit('ibmcloud.formatter', {response: res, message: message});
