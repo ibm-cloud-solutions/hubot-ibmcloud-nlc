@@ -59,19 +59,18 @@ module.exports = function(robot) {
 		utils.getConfirmedResponse(res, switchBoard, i18n.__('nlc.train.prompt'), i18n.__('nlc.train.decline')).then((result) => {
 
 			if (env.nlc_enabled) {
-				res.reply(i18n.__('nlc.train.new.session'));
+				robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.train.new.session')});
 				watsonServices.nlc.train().then(function(trainingResult){
-					res.reply(trainingResult.status_description);
 					return watsonServices.nlc.monitorTraining(trainingResult.classifier_id);
 				}).then(function(result){
-					res.reply(result.status_description);
+					robot.emit('ibmcloud.formatter', {response: res, message: result.status_description});
 				}).catch(function(err){
 					robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
 				});
 			}
 			else {
 				robot.logger.error(`${TAG}: Unable to start a training session because the Natural Language service has not been enabled.`);
-				res.reply(i18n.__('nlc.train.not.configured'));
+				robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.train.not.configured')});
 			}
 		});
 	}

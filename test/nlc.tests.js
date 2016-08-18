@@ -254,7 +254,7 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc status').then();
+			room.user.say('mimiron', '@hubot nlc status');
 		});
 	});
 
@@ -269,7 +269,7 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc list').then();
+			room.user.say('mimiron', '@hubot nlc list');
 		});
 	});
 
@@ -285,24 +285,19 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc help').then();
+			room.user.say('mimiron', '@hubot nlc help');
 		});
 	});
 
 	describe('User starts a new training session', function(){
 		it('should start training a new classifier', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.train.new.session'));
+				done();
+			});
 			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
-				return sprinkles.eventually({ timeout: timeout }, function(){
-					if (room.messages.length < 4){
-						throw new Error('too soon');
-					}
-				}).then(() => false).catch(() => true).then((success) => {
-
-					expect(room.messages.length).to.eql(5);
-					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.new.session')}`);
-					done();
-				});
 			});
 		});
 	});
@@ -316,17 +311,12 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should not process statement as NLC when environment is not set.', function(done){
-			room.user.say('mimiron', 'hubot Can you process Natural Language?').then(() => {
-				return sprinkles.eventually({ timeout: timeout }, function(){
-					if (room.messages.length < 1){
-						throw new Error('too soon');
-					}
-				}).then(() => false).catch(() => true).then((success) => {
-					expect(room.messages.length).to.eql(2);
-					expect(room.messages[1][1]).to.eql(i18n.__('nlc.no.match'));
-					done();
-				});
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.no.match'));
+				done();
 			});
+			room.user.say('mimiron', '@hubot Can you process Natural Language?');
 		});
 
 		it('should not check status of classifier when environment is not set', function(done){
@@ -335,7 +325,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc status').then();
+			room.user.say('mimiron', '@hubot nlc status');
 		});
 
 		it('should not list classifiers when environment is not set', function(done){
@@ -344,7 +334,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc list').then();
+			room.user.say('mimiron', '@hubot nlc list');
 		});
 
 		it('should not auto approve when environment is not set', function(done){
@@ -353,22 +343,17 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc auto approve').then();
+			room.user.say('mimiron', '@hubot nlc auto approve');
 		});
 
 		it('should not train classifier when environment is not set', function(done){
-			room.user.say('mimiron', 'hubot nlc train').then(() => {
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
+				done();
+			});
+			room.user.say('mimiron', '@hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
-				return sprinkles.eventually({ timeout: timeout }, function(){
-					if (room.messages.length < 4){
-						throw new Error('too soon');
-					}
-				}).then(() => false).catch(() => true).then((success) => {
-
-					expect(room.messages.length).to.eql(4);
-					expect(room.messages[3][1]).to.eql(`@mimiron ${i18n.__('nlc.train.not.configured')}`);
-					done();
-				});
 			});
 		});
 	});
@@ -380,18 +365,12 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should fail gracefully when Watson NLC service has a 500 error.', function(done){
-			room.user.say('mimiron', 'hubot high confidence result').then(() => {
-				return sprinkles.eventually({ timeout: timeout }, function(){
-					if (room.messages.length < 2){
-						throw new Error('too soon');
-					}
-				}).then(() => false).catch(() => true).then((success) => {
-					expect(room.messages.length).to.eql(3);
-					expect(room.messages[1][1]).to.eql(i18n.__('nlc.error.unexpected.general'));
-					expect(room.messages[2][1]).to.eql(i18n.__('nlc.error.fallback'));
-					done();
-				});
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+				done();
 			});
+			room.user.say('mimiron', '@hubot high confidence result');
 		});
 	});
 
@@ -423,7 +402,7 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', 'hubot nlc status').then(() => {
-				room.user.say('mimiron', 'yes').then();
+				room.user.say('mimiron', 'yes');
 			});
 		});
 
@@ -433,7 +412,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.list.no.classifiers'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc list').then();
+			room.user.say('mimiron', 'hubot nlc list');
 		});
 	});
 
@@ -444,7 +423,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc auto approve on').then();
+			room.user.say('mimiron', 'hubot nlc auto approve on');
 		});
 
 		it('should respond with auto approve value', function(done){
@@ -453,7 +432,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc auto approve').then();
+			room.user.say('mimiron', 'hubot nlc auto approve');
 		});
 	});
 });
