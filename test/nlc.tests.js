@@ -254,7 +254,7 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc status').then();
+			room.user.say('mimiron', '@hubot nlc status');
 		});
 	});
 
@@ -269,7 +269,7 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc list').then();
+			room.user.say('mimiron', '@hubot nlc list');
 		});
 	});
 
@@ -285,7 +285,7 @@ describe('Test the NLC interaction', function(){
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc help').then();
+			room.user.say('mimiron', '@hubot nlc help');
 		});
 	});
 
@@ -297,7 +297,7 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', 'hubot nlc train').then(() => {
-				room.user.say('mimiron', 'yes').then();
+				room.user.say('mimiron', 'yes');
 			});
 		});
 	});
@@ -316,7 +316,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.no.match'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot Can you process Natural Language?').then();
+			room.user.say('mimiron', '@hubot Can you process Natural Language?');
 		});
 
 		it('should not check status of classifier when environment is not set', function(done){
@@ -325,7 +325,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc status').then();
+			room.user.say('mimiron', '@hubot nlc status');
 		});
 
 		it('should not list classifiers when environment is not set', function(done){
@@ -334,7 +334,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc list').then();
+			room.user.say('mimiron', '@hubot nlc list');
 		});
 
 		it('should not auto approve when environment is not set', function(done){
@@ -343,7 +343,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc auto approve').then();
+			room.user.say('mimiron', '@hubot nlc auto approve');
 		});
 
 		it('should not train classifier when environment is not set', function(done){
@@ -353,7 +353,7 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', '@hubot nlc train').then(() => {
-				room.user.say('mimiron', 'yes').then();
+				room.user.say('mimiron', 'yes');
 			});
 		});
 	});
@@ -370,7 +370,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot high confidence result').then();
+			room.user.say('mimiron', '@hubot high confidence result');
 		});
 	});
 
@@ -402,7 +402,7 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', 'hubot nlc status').then(() => {
-				room.user.say('mimiron', 'yes').then();
+				room.user.say('mimiron', 'yes');
 			});
 		});
 
@@ -412,7 +412,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.list.no.classifiers'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc list').then();
+			room.user.say('mimiron', 'hubot nlc list');
 		});
 	});
 
@@ -423,7 +423,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc auto approve on').then();
+			room.user.say('mimiron', 'hubot nlc auto approve on');
 		});
 
 		it('should respond with auto approve value', function(done){
@@ -432,7 +432,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			room.user.say('mimiron', 'hubot nlc auto approve').then();
+			room.user.say('mimiron', 'hubot nlc auto approve');
 		});
 	});
 });

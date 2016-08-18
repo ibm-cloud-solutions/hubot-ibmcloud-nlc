@@ -13,7 +13,7 @@
 
   "nlc.train.prompt": "Do you want to start a new training session?",
   "nlc.train.decline": "Ok, I won't train for now.",
-  "nlc.train.new.session": "Ok, I'm going to start a new training session. Training a classifier takes about 15 minutes.",
+  "nlc.train.new.session": "Ok, I'm going to start a new training session. Training a classifier takes about 15 minutes. You can check the status with *nlc status*",
   "nlc.train.not.configured" : "I'm unable to start a new training session because the Natural Language service hasn't been configured.",
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type *help*.",
 
