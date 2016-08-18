@@ -65,8 +65,8 @@ module.exports = function(robot) {
 				handle(db, res, classification, robot, descriptions);
 			});
 		}).catch((err) => {
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 			robot.logger.error(`${TAG}: Error processing medium confidence NLC result. Error=${err}`);
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 		});
 	});
 
@@ -115,16 +115,16 @@ module.exports = function(robot) {
 								robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
 							}).catch(function(error) {
 								robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-								throw error;  // To report to user
+								robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 							});
 						}).catch(function(error) {
 							robot.logger.error(`${TAG} Error occurred trying to obtain parameters for selected class; selected class = ${selectedClass}; text = ${text}; error = ${error}.`);
-							throw error;  // To report to user
+							robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 						});
 					}
 				}).catch((error) => {
 					robot.logger.error(`${TAG} Error occurred trying to obtain emit target for selected class; selected class = ${selectedClass}; error = ${error}.`);
-					throw error;  // To report to user
+					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 				});
 
 				// Record medium confidence (learned) NLC result for feedback loop.
@@ -149,8 +149,8 @@ module.exports = function(robot) {
 				});
 			}
 		}).catch((err) => {
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 			robot.logger.error(`${TAG}: Error in med confidence dialog. Error=${err}`);
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 		});
 	}
 

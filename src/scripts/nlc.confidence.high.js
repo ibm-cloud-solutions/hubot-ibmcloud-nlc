@@ -55,8 +55,8 @@ module.exports = function(robot) {
 		nlcDb.open().then((db) => {
 			handle(db, res, classification, robot);
 		}).catch((err) => {
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 			robot.logger.error(`${TAG}: Error processing high confidence NLC for ${classification.top_class}. Error=${err}`);
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 		});
 	});
 
@@ -77,16 +77,16 @@ module.exports = function(robot) {
 						robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
 					}).catch(function(error) {
 						robot.logger.error(`${TAG} Error occurred trying to validate parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-						throw error; // To report to user
+						robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 					});
 				}).catch(function(error) {
 					robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-					throw error; // To report to user
+					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 				});
 			}
 		}).catch((error) => {
 			robot.logger.error(`${TAG} Error occurred trying to obtain emit target for top class; top class = ${classification.top_class}; error = ${error}.`);
-			throw error; // To report to user
+			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 		});
 
 		// Record high confidence (classified) NLC result for feedback loop metrics.

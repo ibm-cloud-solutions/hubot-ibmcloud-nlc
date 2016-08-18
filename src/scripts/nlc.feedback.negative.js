@@ -44,7 +44,7 @@ module.exports = function(robot) {
 
 	robot.on(path.basename(__filename), (res, info) => {
 		robot.logger.debug(`${TAG} Detected negative feedback for Natural Language match. info=${JSON.stringify(info, null, 2)}`);
-		res.send(i18n.__('nlc.feedback.negative'));
+		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.feedback.negative')});
 
 		// Save conversation to feedback DB.
 		utils.handleFeedback(robot, res, info);

@@ -50,7 +50,6 @@ function logMessage(robot, res, userId, text, tgt) {
 			if (info.messagesToSave === 0){
 				// remove original classified statement
 				info.logs = info.logs.slice(1);
-				// robot.emit('nlc.feedback.negative.js', res, info);
 				handleFeedback(robot, res, info);
 				info = null;
 			}
