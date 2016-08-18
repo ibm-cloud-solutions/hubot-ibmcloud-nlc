@@ -17,6 +17,7 @@ var TAG = path.basename(__filename);
 
 const env = require('../lib/env');
 const utils = require('hubot-ibmcloud-utils').utils;
+const palette = require('hubot-ibmcloud-utils').palette;
 const Conversation = require('hubot-conversation');
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
 const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
@@ -42,10 +43,6 @@ const CLASSIFIER_STATUS = /nlc (status)$/i;
 
 module.exports = function(robot) {
 	var switchBoard = new Conversation(robot);
-	var COLORS = {
-		available: '#008571',
-		training: '#ef4e38'
-	};
 
 	// Natural Language match
 	robot.on('nlc.status', (res, parameters) => {
@@ -74,7 +71,7 @@ module.exports = function(robot) {
 						response: res,
 						attachments: [{
 							title: classifier.name,
-							color: classifier.status === 'Available' ? COLORS.available : COLORS.training,
+							color: classifier.status === 'Available' ? palette.available : palette.training,
 							fields: [
 								{title: 'status', value: classifier.status, short: true},
 								{title: 'id', value: classifier.classifier_id, short: true},

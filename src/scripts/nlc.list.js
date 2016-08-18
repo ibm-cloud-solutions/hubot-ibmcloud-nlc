@@ -15,6 +15,7 @@ var path = require('path');
 var TAG = path.basename(__filename);
 
 const env = require('../lib/env');
+const palette = require('hubot-ibmcloud-utils').palette;
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
 
 // --------------------------------------------------------------
@@ -37,11 +38,6 @@ i18n.setLocale('en');
 const SHOW_CLASSIFIERS = /nlc (show|list)$/i;
 
 module.exports = function(robot) {
-	var COLORS = {
-		available: '#008571',
-		training: '#ef4e38'
-	};
-
 	// Natural Language match
 	robot.on('nlc.list', (res, parameters) => {
 		robot.logger.debug(`${TAG}: nlc.list - Natural Language match.`);
@@ -60,7 +56,7 @@ module.exports = function(robot) {
 				var attachments = list.map((classifier) => {
 					var attachment = {
 						title: classifier.name,
-						color: classifier.status === 'Available' ? COLORS.available : COLORS.training
+						color: classifier.status === 'Available' ? palette.available : palette.training
 					};
 					attachment.fields = [
 						{title: 'status', value: classifier.status, short: true},
