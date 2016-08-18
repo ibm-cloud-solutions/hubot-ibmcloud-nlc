@@ -52,7 +52,7 @@ module.exports = function(robot) {
 	let paramManager = new ParamManager();
 	let switchBoard = new Conversation(robot);
 
-	robot.on(path.basename(__filename), (res, classification) => {
+	robot.on('nlc.confidence.med', (res, classification) => {
 		// promise result is cached
 		nlcDb.open().then((db) => {
 			let descriptionPromises = classification.classes.map((clz) => {

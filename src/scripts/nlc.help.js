@@ -33,11 +33,9 @@ i18n.setLocale('en');
 // ----------------------------------------------------
 // Start of the HUBOT interactions.
 // ----------------------------------------------------
-var path = require('path');
-
 module.exports = function(robot) {
 
-	robot.on(path.basename(__filename), (res) => {
+	robot.on('nlc.help', (res) => {
 		robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.help')});
 	});
 

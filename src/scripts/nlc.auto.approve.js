@@ -41,7 +41,7 @@ i18n.setLocale('en');
 const AUTO_APPROVE = /nlc\s(auto approve)\s?(on|off|true|false)?/i;
 
 module.exports = function(robot) {
-	robot.on(path.basename(__filename), (res, parameters) => {
+	robot.on('nlc.auto.approve', (res, parameters) => {
 		robot.logger.debug(`${TAG}: Natural Language match.`);
 		if (parameters && parameters.autoapprove) {
 			updateAutoApprove(res, parameters.autoapprove);

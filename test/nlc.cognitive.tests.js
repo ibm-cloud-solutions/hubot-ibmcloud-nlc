@@ -49,7 +49,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'status of my classifier', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.status.js', res, {});
+			room.robot.emit('nlc.status', res, {});
 		});
 	});
 
@@ -65,7 +65,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 			var res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.list.js', res, {});
+			room.robot.emit('nlc.list', res, {});
 		});
 	});
 
@@ -83,7 +83,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			});
 
 			var res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.management.help.js', res, {});
+			room.robot.emit('nlc.management.help', res, {});
 		});
 	});
 
@@ -98,7 +98,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			});
 
 			var res = { message: {text: 'I need some help', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.help.js', res, {});
+			room.robot.emit('nlc.help', res, {});
 		});
 	});
 
@@ -110,7 +110,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				done();
 			});
 			var res = { message: {text: 'turn auto approve off', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.auto.approve.js', res, { autoapprove: 'on' });
+			room.robot.emit('nlc.auto.approve', res, { autoapprove: 'on' });
 		});
 
 		it('should respond with auto approve value', function(done){
@@ -120,7 +120,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				done();
 			});
 			var res = { message: {text: 'auto approve setting', user: {id: 'mimiron'}}, response: room };
-			room.robot.emit('nlc.auto.approve.js', res, {});
+			room.robot.emit('nlc.auto.approve', res, {});
 		});
 	});
 });

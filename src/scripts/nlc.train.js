@@ -45,7 +45,7 @@ const TRAIN = /nlc (train|retrain)$/i;
 module.exports = function(robot) {
 	var switchBoard = new Conversation(robot);
 
-	robot.on(path.basename(__filename), (res) => {
+	robot.on('nlc.train', (res) => {
 		robot.logger.debug(`${TAG}: nlc.train - Natural Language match.`);
 		train(res);
 	});

@@ -93,7 +93,7 @@ describe('Test the NLC interaction', function(){
 				// add class mapping for negative feedback testing
 				return db.put({
 					_id: 'nlc.feedback.negative',
-					emittarget: 'nlc.feedback.negative.js'
+					emittarget: 'nlc.feedback.negative'
 				});
 			});
 		});
@@ -111,7 +111,7 @@ describe('Test the NLC interaction', function(){
 		it('should emit a low classification event', function(done) {
 			let cntr = 0;
 			let docId;
-			room.robot.on('nlc.confidence.low.js', (res, classification) => {
+			room.robot.on('nlc.confidence.low', (res, classification) => {
 				if (cntr === 0){
 					// check the database for the document miss
 					waitForDocType(db, 'unclassified').then((id) => {
@@ -142,7 +142,7 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should emit a medium classification event', function(done) {
-			room.robot.on('nlc.confidence.med.js', (res, classification) => {
+			room.robot.on('nlc.confidence.med', (res, classification) => {
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 2){
 						throw new Error('too soon');
@@ -167,7 +167,7 @@ describe('Test the NLC interaction', function(){
 
 		it('should emit a medium classification event and not be classified correctly', function(done) {
 			const msg = 'medium confidence result with no classification';
-			room.robot.on('nlc.confidence.med.js', (res, classification) => {
+			room.robot.on('nlc.confidence.med', (res, classification) => {
 				return sprinkles.eventually({ timeout: timeout }, function(){
 					if (room.messages.length < 2){
 						throw new Error('too soon');
@@ -203,7 +203,7 @@ describe('Test the NLC interaction', function(){
 		});
 
 		it('should emit a high classification event', function(done) {
-			room.robot.on('nlc.confidence.high.js', (res, classification) => {
+			room.robot.on('nlc.confidence.high', (res, classification) => {
 				// check the database for the document hit
 				waitForDocType(db, 'classified').then(() => {
 					done();
@@ -219,12 +219,12 @@ describe('Test the NLC interaction', function(){
 			room.user.say('mimiron', 'hubot negative feedback');
 
 			room.robot.on('ibmcloud-auth-to-nlc', (res, target) => {
-				if (target.emitTarget === 'nlc.feedback.negative.js'){
-					room.robot.emit('nlc.feedback.negative.js', res);
+				if (target.emitTarget === 'nlc.feedback.negative'){
+					room.robot.emit('nlc.feedback.negative', res);
 				}
 			});
 
-			room.robot.on('nlc.feedback.negative.js', (res) => {
+			room.robot.on('nlc.feedback.negative', (res) => {
 				// check the database for the document hit
 				waitForDocType(db, 'negative_fb').then((docId) => {
 					db.get(docId).then((doc) => {
