@@ -352,7 +352,7 @@ describe('Test the NLC interaction', function(){
 				expect(event.message).to.contain(i18n.__('nlc.train.not.configured'));
 				done();
 			});
-			room.user.say('mimiron', '@hubot nlc auto approve').then(() => {
+			room.user.say('mimiron', '@hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes').then();
 			});
 		});
