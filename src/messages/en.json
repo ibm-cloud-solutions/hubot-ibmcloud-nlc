@@ -31,6 +31,7 @@
   "nlc.help.list": "List all the classifiers in the NLC instance.",
   "nlc.help.status": "Show current status of the Hubot NLC classifier.",
   "nlc.help.train": "Retrain the Hubot NLC classifier.",
+  "nlc.help.auto.approve": "Toggle auto approve setting for training NLC statements.",
 
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."
