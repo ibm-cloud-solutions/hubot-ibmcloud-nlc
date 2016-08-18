@@ -18,11 +18,14 @@
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type `help`.",
 
   "nlc.status.train.duration": "Classifier has been training for %s minute(s).",
-  "nlc.status.new.statements": "I have *%s* new approved training statements. To start a new training session with these statements just ask me or type `nlc train`",
+  "nlc.status.new.statements": "I have *%s* new approved training statements. To start a new training session with these statements just ask me or type *nlc train*",
   "nlc.status.no.statements": "I don't have any new approved training statements.",
   "nlc.status.other.training": "You have a new classifier that has been training for %s minute(s).",
   "nlc.status.prompt": "You do not have any classifiers under *%s*. Would you like to start training one?",
   "nlc.list.no.classifiers": "No classifiers found.",
+  "nlc.auto.approve.set": "Auto approve is set to *%s*.",
+	"nlc.auto.approve.prompt": "Would you like to turn auto approve *%s*?",
+	"nlc.auto.approve.info": "You can toggle it on or off using *nlc auto approve [on|off|true|false]*",
 
   "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type `help`.",
   "nlc.help.list": "List all the classifiers in the NLC instance.",
