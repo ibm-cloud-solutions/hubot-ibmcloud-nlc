@@ -75,17 +75,11 @@ module.exports = function(robot) {
 						};
 						robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
 						robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
-					}).catch(function(error) {
-						robot.logger.error(`${TAG} Error occurred trying to validate parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-						robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 					});
-				}).catch(function(error) {
-					robot.logger.error(`${TAG} Error occurred trying to obtain parameters for top class; top class = ${classification.top_class}; text = ${text}; error = ${error}.`);
-					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 				});
 			}
 		}).catch((error) => {
-			robot.logger.error(`${TAG} Error occurred trying to obtain emit target for top class; top class = ${classification.top_class}; error = ${error}.`);
+			robot.logger.error(`${TAG} Error occurred trying to obtain emit target and parameters for top class; top class = ${classification.top_class}; error = ${error}.`);
 			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 		});
 
