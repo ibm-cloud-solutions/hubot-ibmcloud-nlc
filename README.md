@@ -10,8 +10,11 @@ Adds a framework to enable Natural Language interactions in your Hubot scripts.
 
 ## Getting Started
 * [Overview](#overview)
-* [Cognitive Integration](#cognitive_integration)
+* [Cognitive Integration](#cognitive-integration)
 * [What is happening under the covers](#what-is-happening-under-the-covers)
+* [Commands](#commands)
+* [Hubot Adapter Setup](#hubot-adapter-setup)
+* [Development](#development)
 * [License](#license)
 * [Contribute](#contribute)
 
@@ -218,6 +221,53 @@ The intended general flow for the natural language processing is as follows:
 1. If the user is authorized to issue the command, then the emit target associated with the command is invoked with the parameters.
 
 1. The emit target listener within the command script gets control.  It should validate that it has the needed parameter values and then proceed with the same command processing that occurs if it had been received via the regex path.
+
+
+## Commands
+
+- `nlc status` - Show current status of the Hubot NLC classifier.
+- `nlc list|show` - List all the classifiers in the NLC instance.
+- `nlc train|retrain` - Retrain the Hubot NLC classifier.
+- `nlc auto approve [on|off|true|false]` - Toggle auto approve setting for training NLC statements.
+
+
+## Hubot Adapter Setup
+
+Hubot supports a variety of adapters to connect to popular chat clients.  For more feature rich experiences you can setup the following adapters:
+- [Slack setup](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/adapters/slack.md)
+- [Facebook Messenger setup](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/adapters/facebook.md)
+
+## Development
+
+Please refer to the [CONTRIBUTING.md](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/CONTRIBUTING.md) before starting any work.  Steps for running this script for development purposes:
+
+### Configuration Setup
+
+1. Create `config` folder in root of this project.
+2. Create `env` in the `config` folder, with the following contents:
+```
+export HUBOT_WATSON_NLC_URL=<API URL for Watson Natural Language Classifier>
+export HUBOT_WATSON_NLC_USERNAME=<User Id for Watson Natural Language Classifier>
+export HUBOT_WATSON_NLC_PASSWORD=<Password for Watson Natural Language Classifier>
+export HUBOT_WATSON_NLC_CLASSIFIER=<(optional) Name for the classifier>
+```
+3. In order to view content in chat clients you will need to add `hubot-ibmcloud-formatter` to your `external-scripts.json` file. Additionally, if you want to use `hubot-help` to make sure your command documentation is correct.  Create `external-scripts.json` in the root of this project, with the following contents:
+```
+[
+	"hubot-help",
+	"hubot-ibmcloud-formatter"
+]
+```
+4. Lastly, run `npm install` to obtain all the dependent node modules.
+
+### Running Hubot with Adapters
+
+Hubot supports a variety of adapters to connect to popular chat clients.
+
+If you just want to use:
+ - Terminal: run `npm run start`
+ - [Slack: link to setup instructions](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/adapters/slack.md)
+ - [Facebook Messenger: link to setup instructions](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/adapters/facebook.md)
 
 
 ## License
