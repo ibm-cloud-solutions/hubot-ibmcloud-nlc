@@ -27,10 +27,10 @@
   "nlc.auto.approve.info": "You can toggle it on or off using *nlc auto approve on|off|true|false*",
 
   "nlc.help": "I'm trained to help with Bluemix DevOps.  To see what I can do type *help*.",
-  "nlc.help.list": "List all the classifiers in the NLC instance.",
-  "nlc.help.status": "Show current status of the Hubot NLC classifier.",
-  "nlc.help.train": "Retrain the Hubot NLC classifier.",
-  "nlc.help.auto.approve": "Toggle auto approve setting for training NLC statements.",
+  "nlc.help.list": "List all the Watson NLC instances.",
+  "nlc.help.status": "Show the status of the Watson NLC instance currently being used by the bot.",
+  "nlc.help.train": "Train a new Watson NLC instance with the current training data.",
+  "nlc.help.auto.approve": "Toggle auto approve of new NLC statements learned from usage.",
 
   "cognitive.prompt.param": "OK. What is the value for the *%s* parameter?",
   "cognitive.prompt.param.again": "Couldn't extract the *%s* parameter, please try to say only the parameter value."
