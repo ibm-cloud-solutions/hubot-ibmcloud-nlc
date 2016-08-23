@@ -54,6 +54,7 @@ module.exports = (robot) => {
 		help += `${robot.name} nlc list|show - ` + i18n.__('nlc.help.list') + '\n';
 		help += `${robot.name} nlc train|retrain - ` + i18n.__('nlc.help.train') + '\n';
 		help += `${robot.name} nlc auto approve [on|off|true|false] - ` + i18n.__('nlc.help.auto.approve') + '\n';
+		help += `${robot.name} nlc data [className] - ` + i18n.__('nlc.help.data') + '\n';
 
 		let message = '\n' + help;
 		robot.emit('ibmcloud.formatter', {response: res, message: message});

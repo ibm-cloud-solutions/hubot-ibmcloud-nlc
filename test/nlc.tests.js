@@ -95,6 +95,20 @@ describe('Test the NLC interaction', function(){
 					_id: 'nlc.feedback.negative',
 					emittarget: 'nlc.feedback.negative'
 				});
+			}).then(() => {
+				// add classifier data for furrent classifier
+				return db.put({
+					_id: 'cd02b5x110-nlc-5103',
+					type: 'classifier_data',
+					trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
+				});
+			}).then(() => {
+				// add classifier data
+				return db.put({
+					_id: 'cd02b5x110-nlc-0000',
+					type: 'classifier_data',
+					trainedData: 'Sample text,classification\nSample text 2,classification\nSample text 3,classification3'
+				});
 			});
 		});
 	});
@@ -255,6 +269,45 @@ describe('Test the NLC interaction', function(){
 				}
 			});
 			room.user.say('mimiron', '@hubot nlc status');
+		});
+	});
+
+	describe('user asks for classifier data for current classifier', function() {
+		it('should reply with slack attachment with current classifier data', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				// console.log(event);
+				if (event.message){
+					expect(event.message).to.be.eql('NLC instance **cd02b5x110-nlc-5103** was trained with **2** classifications and **3** statements.');
+				}
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(1);
+					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-5103');
+					expect(event.attachments[0].fields).to.have.length(2);
+					expect(event.attachments[0].fields[0].title).to.eql('classification');
+					expect(event.attachments[0].fields[0].value).to.eql('Sample classification text\nSample classification text 2\n');
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc data');
+		});
+	});
+
+	describe('user asks for training data for a specific classifier', function() {
+		it('should reply with slack attachment with current classifier data', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.message){
+					expect(event.message).to.be.eql('NLC instance **cd02b5x110-nlc-0000** was trained with **2** classifications and **3** statements.');
+				}
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(1);
+					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-0000');
+					expect(event.attachments[0].fields).to.have.length(2);
+					expect(event.attachments[0].fields[0].title).to.eql('classification');
+					expect(event.attachments[0].fields[0].value).to.eql('Sample text\nSample text 2\n');
+					done();
+				}
+			});
+			room.user.say('mimiron', '@hubot nlc data classification cd02b5x110-nlc-0000');
 		});
 	});
 

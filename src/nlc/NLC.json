@@ -2,6 +2,17 @@
 	"name": "hubot-ibmcloud-nlc",
 	"version": "0.0.1",
 	"classes": [
+		{
+	      "class": "nlc.data",
+	      "description": "Show data used to train the natural language classifier",
+	      "emittarget": "nlc.data",
+	      "texts": [
+			"Show NLC data",
+			"Get Natural Language training data",
+			"See my training data",
+			"nlc data"
+		  ]
+		},
 	    {
 	      "class": "nlc.help",
 	      "description": "Get help for using the bot",
