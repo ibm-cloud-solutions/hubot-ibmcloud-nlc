@@ -51,22 +51,14 @@ module.exports = function(robot) {
 	// RegEx match
 	robot.respond(NLC_DATA, {id: 'nlc.data'}, function(res) {
 		robot.logger.debug(`${TAG}: nlc.data - RegEx match. `, res.match);
-
-		if (res.match.length > 4) {
-			getNLCData(res, res.match[2], res.match[4]);
-		}
-		else if (res.match.length > 2) {
-			getNLCData(res, res.match[2]);
-		}
-		else {
-			getNLCData(res);
-		}
+		getNLCData(res, res.match[2], res.match[4]);
 	});
 
 	function getNLCData(res, searchClassNames, classifierId) {
 		if (env.nlc_enabled) {
-
-			// If classifierId is provided, use that, otherwise use the current classifier.
+			// NOTE: The ability to provide a classifierId is hidden because users of the bot
+			// only have access to the current classifier. I'm leaving it here because it
+			// was useful for development, we can document it if proven useful for users.
 			new Promise((resolve, reject) => {
 				if (classifierId){
 					resolve(classifierId);
