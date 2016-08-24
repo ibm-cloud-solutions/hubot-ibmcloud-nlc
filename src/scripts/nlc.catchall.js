@@ -25,6 +25,8 @@ const path = require('path');
 const TAG = path.basename(__filename);
 const env = require(path.resolve(__dirname, '..', 'lib', 'env'));
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
+const utils = require('hubot-ibmcloud-utils').utils;
+const esrever = require('esrever');
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -43,14 +45,34 @@ const i18n = new (require('i18n-2'))({
 // At some point we need to toggle this setting based on some user input.
 i18n.setLocale('en');
 
-let botName;
-
 /**
  * Strips the bot name from the given statement.
  */
-function stripBotName(text) {
+function stripBotName(botName, text) {
 	var nameToken = new RegExp('(^|\\s)@?' + botName + ':?\\s', 'g');
 	return text.replace(nameToken, ' ').trim();
+}
+
+/**
+ * Checks to see if the bot has been addressed in a message.
+ */
+function checkBotNameInMessage(botName, text, robot) {
+	let lookBehindCheck = false;
+	let lookAheadCheck = false;
+
+	let modifiedBotName = botName;
+	if (utils.isSlack(robot)) {
+		modifiedBotName = `@${botName}`;
+	}
+	let reversedBotName = esrever.reverse(modifiedBotName);
+
+	let lookAheadRegExp = new RegExp(`(${modifiedBotName})(?\!\w)`);
+	let lookBehindRegExp = new RegExp(`(${reversedBotName})(?\!\w)`);
+
+	lookAheadCheck = text.match(lookAheadRegExp) !== null;
+	lookBehindCheck = esrever.reverse(text).match(lookBehindRegExp) !== null;
+
+	return lookBehindCheck && lookAheadCheck;
 }
 
 /**
@@ -109,7 +131,7 @@ function processNLC(robot, text) {
 // ----------------------------------------------------
 
 module.exports = function(robot) {
-	botName = robot.name;
+	let botName = robot.name;
 
 	if (env.nlc_enabled) {
 		robot.logger.info(`${TAG} Registering Natural Language processing.`);
@@ -117,9 +139,9 @@ module.exports = function(robot) {
 			// Respond only when the bot is addressed in a public room or if it's a private message. Ignore other bots.
 			if (res.message.user.name !== 'hubot' &&
 				(res.message.user.name === res.message.user.room ||
-				res.message.text.indexOf(botName) >= 0)) {
+				checkBotNameInMessage(botName, res.message.text, robot))) {
 				// Remove the bot name from the bot statement
-				let text = stripBotName(res.message.text).trim();
+				let text = stripBotName(botName, res.message.text).trim();
 				// make sure we have more than one word in the text
 				if (text.split(' ').length > 1){
 					processNLC(robot, text).then((result) => {
@@ -148,9 +170,9 @@ module.exports = function(robot) {
 		robot.logger.info(`${TAG} Registering simple catchAll.  Natural Language processing is disabled.`);
 		robot.catchAll((res) => {
 			if (res.message.user.name === res.message.user.room ||
-				res.message.text.indexOf(botName) >= 0) {
+				checkBotNameInMessage(botName, res.message.text, robot)) {
 				// Remove the bot name from the bot statement
-				let text = stripBotName(res.message.text).trim();
+				let text = stripBotName(botName, res.message.text).trim();
 				// make sure we have more than one word in the text
 				if (text.split(' ').length > 1){
 					robot.logger.debug(`${TAG}: Unable to understand the statement. Natural Language processing is disabled.`);
