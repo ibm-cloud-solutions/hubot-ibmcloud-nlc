@@ -84,17 +84,17 @@ module.exports = function(robot) {
 					while (s.length < size) s = ' ' + s;
 					return s;
 				};
-				prompt += `(${nOpts}) [${pad(confidence, 5)}%] ${descriptions[i]}\n`;
+				prompt += `(${nOpts + 1}) [${pad(confidence, 5)}%] ${descriptions[i]}\n`;
 				nOpts++;
 			}
 		}
-		prompt += i18n.__('nlc.confidence.med.incorrect', nOpts);
+		prompt += i18n.__('nlc.confidence.med.incorrect', nOpts + 1);
 
-		const regex = new RegExp(`([0-${nOpts}]+)`);
+		const regex = utils.generateRegExpForNumberedList(nOpts + 1);
 
 		utils.getExpectedResponse(res, robot, switchBoard, prompt, regex).then((result) => {
 			let response = result.match[1];
-			let resNum = parseInt(response, 10);
+			let resNum = parseInt(response, 10) - 1;
 			if (resNum < nOpts){
 				let selectedClass = classification.classes[resNum].class_name;
 				let reply = i18n.__('nlc.confidence.med.classify', classification.text, classification.classes[resNum].class_name);
