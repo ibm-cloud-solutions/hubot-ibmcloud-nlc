@@ -165,10 +165,10 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 					// Verify description strings are used.
-					expect(room.messages[1][1]).to.contain('(1) [20.64%] Description for weather alerts classification');
+					expect(room.messages[1][1]).to.contain('(2) [20.64%] Description for weather alerts classification');
 
 					// reply with correct
-					room.user.say('mimiron', '1');
+					room.user.say('mimiron', '2');
 					// check the database for the document training
 					return waitForDocType(db, 'learned').then((docId) => {
 						db.get(docId).then((doc) => {
@@ -190,7 +190,7 @@ describe('Test the NLC interaction', function(){
 					}
 				}).then(() => false).catch(() => true).then((success) => {
 					// reply with incorrect
-					room.user.say('mimiron', '2');
+					room.user.say('mimiron', '3');
 
 					// check the database for the document training
 					return waitForDocType(db, 'unclassified', 1, msg).then((docId) => {
