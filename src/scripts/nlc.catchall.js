@@ -169,8 +169,9 @@ module.exports = function(robot) {
 	else {
 		robot.logger.info(`${TAG} Registering simple catchAll.  Natural Language processing is disabled.`);
 		robot.catchAll((res) => {
-			if (res.message.user.name === res.message.user.room ||
-				checkBotNameInMessage(botName, res.message.text, robot)) {
+			if (res.message.user.name !== 'hubot' &&
+				(res.message.user.name === res.message.user.room ||
+				checkBotNameInMessage(botName, res.message.text, robot))) {
 				// Remove the bot name from the bot statement
 				let text = stripBotName(botName, res.message.text).trim();
 				// make sure we have more than one word in the text
