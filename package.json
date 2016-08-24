@@ -59,6 +59,7 @@
     "hubot-ibmcloud-cognitive-lib": ">=0.0.27",
     "hubot-ibmcloud-utils": ">=0.0.8",
     "hubot-conversation": "^1.1.1",
-    "i18n-2": "^0.6.3"
+    "i18n-2": "^0.6.3",
+    "esrever": "^0.2.0"
   }
 }
