@@ -76,6 +76,25 @@ function waitForDocType(db, type, rev, text){
 	});
 }
 
+describe('Load modules through index', function() {
+
+	let room;
+
+	beforeEach(function() {
+		room = helper.createRoom();
+	});
+
+	afterEach(function() {
+		room.destroy();
+	});
+
+	context('load index`', function() {
+		it('should load without problems', function() {
+			require('../index')(room.robot);
+		});
+	});
+});
+
 describe('Test the NLC interaction', function(){
 	let room;
 	let db;
@@ -497,6 +516,76 @@ describe('Test the NLC interaction', function(){
 				done();
 			});
 			room.user.say('mimiron', 'hubot nlc auto approve');
+		});
+	});
+});
+
+describe('Test the NLC interaction with getEntities failure', function(){
+	let room;
+	let db;
+	let badparamClassification = {
+		text: 'medium confidence result',
+		top_class: 'test.badparam.js',
+		classes:
+			[ { class_name: 'test.badparam.js', confidence: 0.5672086742164803 } ]
+	};
+
+	before(function() {
+		mockNLP.setupMockery();
+		return nlcDb.open().then((res) => {
+			db = res;
+			return db.put({
+				// add class with description
+				_id: 'test.badparam.js',
+				description: 'Description for bad params class',
+				emittarget: 'badparam.js',
+				parameters: [
+					{
+						name: 'aname',
+						type: 'entity',
+						entityfunction: 'afunction'
+					}
+				]
+			});
+		});
+	});
+
+	beforeEach(function() {
+		room = helper.createRoom();
+	});
+
+	afterEach(function() {
+		room.destroy();
+	});
+
+
+	context('user says a statement', function() {
+		it('should emit a medium classification event', function(done) {
+			var replyFn = function(msg) {
+				if (msg.includes('(1)')) {
+					room.user.say('mimiron', '1');
+				}
+				else {
+					done(new Error(`Unexpected dialog prompt [${msg}].`));
+				}
+			};
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.message.includes(i18n.__('nlc.error.entities', ''))) {
+					done();
+				}
+			});
+			var res = { message: {text: 'Medium confidence', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			room.robot.emit('nlc.confidence.med', res, badparamClassification);
+		});
+
+		it('should emit a high classification event', function(done) {
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.message.includes(i18n.__('nlc.error.entities', ''))) {
+					done();
+				}
+			});
+			var res = { message: {text: 'High confidence', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.confidence.high', res, badparamClassification);
 		});
 	});
 });

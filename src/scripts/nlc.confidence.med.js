@@ -26,8 +26,7 @@ const logUtils = require('../lib/utils');
 const Conversation = require('hubot-conversation');
 const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
 const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
-const ParamManager = require('hubot-ibmcloud-cognitive-lib').paramManager;
-const extractParameters = require('../lib/extractParameters');
+const EntityManager = require('hubot-ibmcloud-cognitive-entities').entityManager;
 const env = require('../lib/env');
 
 // --------------------------------------------------------------
@@ -49,7 +48,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	let paramManager = new ParamManager();
+	let entityManager = new EntityManager();
 	let switchBoard = new Conversation(robot);
 
 	robot.on('nlc.confidence.med', (res, classification) => {
@@ -105,19 +104,20 @@ module.exports = function(robot) {
 					if (tgt) {
 						// Obtain statement from res removing the bot name
 						let text = res.message.text.replace(robot.name, '').trim();
-						paramManager.getParameters(selectedClass, text, tgt.parameters).then(function(parameters) {
-							extractParameters.validateParameters(robot, res, paramManager, selectedClass, text, tgt.parameters, parameters).then(function(validParameters) {
-								let authEmitParams = {
-									emitTarget: tgt.target,
-									emitParameters: validParameters
-								};
-								robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
-								robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
-							});
+						entityManager.getEntities(robot, res, text, selectedClass, tgt.parameters).then((parameters) => {
+							var authEmitParams = {
+								emitTarget: tgt.target,
+								emitParameters: parameters
+							};
+							robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${parameters}`);
+							robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
+						}).catch((error) => {
+							robot.logger.error(`${TAG} Error occurred trying to obtain entity values for selected class; selected class = ${selectedClass}; error = ${error}.`);
+							robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.entities', error)});
 						});
 					}
 				}).catch((error) => {
-					robot.logger.error(`${TAG} Error occurred trying to obtain emit target and parameters for selected class; selected class = ${selectedClass}; error = ${error}.`);
+					robot.logger.error(`${TAG} Error occurred trying to obtain emit target for selected class; selected class = ${selectedClass}; error = ${error}.`);
 					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
 				});
 
