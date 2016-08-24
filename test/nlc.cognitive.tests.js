@@ -10,6 +10,7 @@ const expect = require('chai').expect;
 const Helper = require('hubot-test-helper');
 const helper = new Helper('../src/scripts');
 const mockUtils = require('./nlc.mock');
+const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
 
 const i18n = new (require('i18n-2'))({
 	locales: ['en'],
@@ -25,9 +26,21 @@ i18n.setLocale('en');
 
 describe('Interacting with NLC commands via Natural Language', function() {
 	let room;
+	let db;
 
 	before(function() {
 		mockUtils.setupMockery();
+		return nlcDb.open().then((res) => {
+			db = res;
+			// add classifier data for current classifier, only if it hasn't been added. Data may exist if nlc.tests runs first.
+			return db.get('cd02b5x110-nlc-5103').catch(() => {
+				return db.put({
+					_id: 'cd02b5x110-nlc-5103',
+					type: 'classifier_data',
+					trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
+				});
+			});
+		});
 	});
 
 	beforeEach(function() {
@@ -69,6 +82,23 @@ describe('Interacting with NLC commands via Natural Language', function() {
 		});
 	});
 
+	context('user asks for classifier data', function() {
+		it('should reply with slack attachment with classifier data', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.attachments && event.attachments.length >= 1){
+					expect(event.attachments.length).to.eql(1);
+					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-5103');
+					expect(event.attachments[0].fields.length).to.eql(2);
+					expect(event.attachments[0].fields[0].title).to.eql('classification');
+					expect(event.attachments[0].fields[0].value).to.eql('Sample classification text\nSample classification text 2\n');
+					done();
+				}
+			});
+			var res = { message: {text: 'data for my classifier', user: {id: 'mimiron'}}, response: room };
+			room.robot.emit('nlc.data', res, {});
+		});
+	});
+
 	context('user asks for nlc help', function() {
 		it('should respond with help', function(done) {
 			room.robot.on('ibmcloud.formatter', (event) => {
@@ -78,6 +108,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 					expect(event.message).to.contain(i18n.__('nlc.help.list'));
 					expect(event.message).to.contain(i18n.__('nlc.help.train'));
 					expect(event.message).to.contain(i18n.__('nlc.help.auto.approve'));
+					expect(event.message).to.contain(i18n.__('nlc.help.data'));
 					done();
 				}
 			});
