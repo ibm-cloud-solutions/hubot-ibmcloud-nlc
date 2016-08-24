@@ -5,9 +5,9 @@ To interact with your bot using natural language you must provide credentials to
 ### Bluemix Services Used
 
 This library uses the following IBM Bluemix services:
-- [Watson Natural Language Classifier](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/setup/nlc.md) (required)
-- [Cloudant](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/setup/cloudant.md) (optional)
-- [Alchemy API](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/setup/alchemy.md) (optional)
+- [Watson Natural Language Classifier](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/services/nlc.md) (required)
+- [Cloudant](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/services/cloudant.md) (optional)
+- [Alchemy API](https://github.com/ibm-cloud-solutions/hubot-ibmcloud-nlc/blob/master/docs/services/alchemy.md) (optional)
 
 ## Provisioning Configuration
 
