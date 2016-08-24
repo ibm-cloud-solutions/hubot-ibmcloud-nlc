@@ -229,6 +229,7 @@ The intended general flow for the natural language processing is as follows:
 - `nlc list|show` - List all the Watson NLC instances.
 - `nlc train|retrain` - Train a new Watson NLC instance with the current training data.
 - `nlc auto approve [on|off|true|false]` - Toggle auto approve of new NLC statements learned from usage.
+- `nlc data [className]` - Show the data used to train the NLC instance.
 
 **Note:** Usage of `auto approve` could have potential negative effects. Auto-approving the classified statements if they include keywords/entities could cause incorrect classifications for other command usages in the future.
 

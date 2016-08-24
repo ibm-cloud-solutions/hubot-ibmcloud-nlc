@@ -336,6 +336,7 @@ describe('Test the NLC interaction', function(){
 					expect(event.message).to.contain(i18n.__('nlc.help.list'));
 					expect(event.message).to.contain(i18n.__('nlc.help.train'));
 					expect(event.message).to.contain(i18n.__('nlc.help.auto.approve'));
+					expect(event.message).to.contain(i18n.__('nlc.help.data'));
 					done();
 				}
 			});
