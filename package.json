@@ -1,6 +1,6 @@
 {
   "name": "hubot-ibmcloud-nlc",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "Adds Natural Language capabilities to Hubot",
   "main": "index.js",
   "repository": {
