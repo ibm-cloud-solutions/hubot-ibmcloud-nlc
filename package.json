@@ -1,6 +1,6 @@
 {
   "name": "hubot-ibmcloud-nlc",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "Adds Natural Language capabilities to Hubot",
   "main": "index.js",
   "repository": {
@@ -56,7 +56,8 @@
     "index.js"
   ],
   "dependencies": {
-    "hubot-ibmcloud-cognitive-lib": ">=0.0.27",
+    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
+    "hubot-ibmcloud-cognitive-entities": ">=0.0.4",
     "hubot-ibmcloud-utils": ">=0.0.8",
     "hubot-conversation": "^1.1.1",
     "i18n-2": "^0.6.3",

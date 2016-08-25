@@ -22,8 +22,7 @@ const path = require('path');
 const TAG = path.basename(__filename);
 const nlcconfig = require('hubot-ibmcloud-cognitive-lib').nlcconfig;
 const nlcDb = require('hubot-ibmcloud-cognitive-lib').nlcDb;
-const ParamManager = require('hubot-ibmcloud-cognitive-lib').paramManager;
-const extractParameters = require('../lib/extractParameters');
+const EntityManager = require('hubot-ibmcloud-cognitive-entities').entityManager;
 
 // --------------------------------------------------------------
 // i18n (internationalization)
@@ -44,7 +43,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	let paramManager = new ParamManager();
+	let entityManager = new EntityManager();
 
 	robot.on('nlc.confidence.high', (res, classification) => {
 		// TODO: Remove displaying of top classes and confidence back to user.
@@ -67,19 +66,20 @@ module.exports = function(robot) {
 			if (tgt) {
 				// Obtain statement from res removing the bot name
 				var text = res.message.text.replace(robot.name, '').trim();
-				paramManager.getParameters(classification.top_class, text, tgt.parameters).then((parameters) => {
-					extractParameters.validateParameters(robot, res, paramManager, classification.top_class, text, tgt.parameters, parameters).then((validParameters) => {
-						var authEmitParams = {
-							emitTarget: tgt.target,
-							emitParameters: validParameters
-						};
-						robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${validParameters}`);
-						robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
-					});
+				entityManager.getEntities(robot, res, text, classification.top_class, tgt.parameters).then((parameters) => {
+					var authEmitParams = {
+						emitTarget: tgt.target,
+						emitParameters: parameters
+					};
+					robot.logger.info(`${TAG} Emitting to NLC target ${tgt.target} with params=${parameters}`);
+					robot.emit('ibmcloud-auth-to-nlc', res, authEmitParams);
+				}).catch((error) => {
+					robot.logger.error(`${TAG} Error occurred trying to obtain entity values for top class; top class = ${classification.top_class}; error = ${error}.`);
+					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.entities', error)});
 				});
 			}
 		}).catch((error) => {
-			robot.logger.error(`${TAG} Error occurred trying to obtain emit target and parameters for top class; top class = ${classification.top_class}; error = ${error}.`);
+			robot.logger.error(`${TAG} Error occurred trying to obtain emit target for top class; top class = ${classification.top_class}; error = ${error}.`);
 			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
 		});
 

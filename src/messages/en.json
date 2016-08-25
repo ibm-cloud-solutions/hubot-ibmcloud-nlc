@@ -13,6 +13,7 @@
   "nlc.error.unexpected.general": "I'm having trouble processing natural language requests. If the problem persist contact your bot administrator.",
   "nlc.process.error": "Sorry, I was unable to process your response.",
   "nlc.feedback.negative": "Sorry I misunderstood you. I'll report this mistake. Can you repeat your request in a different way?",
+  "nlc.error.entities": "I had trouble extracting the entities from your request.  %s",
 
   "nlc.train.prompt": "Do you want to start a new training session?",
   "nlc.train.decline": "Ok, I won't train for now.",
