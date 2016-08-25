@@ -76,6 +76,13 @@ function checkBotNameInMessage(botName, text, robot) {
 }
 
 /**
+ * Checks to see if the conversation is happening in a direct message.
+ */
+function isDirectMessage(res) {
+	return res.message.room[0] === 'D';
+}
+
+/**
  * If a statement does not match any regular expressions for commands, then NLC/RE processing is
  * invoked to determine the class best fitting the statement and pulling parameter values from the
  * statement.
@@ -138,7 +145,7 @@ module.exports = function(robot) {
 		robot.catchAll((res) => {
 			// Respond only when the bot is addressed in a public room or if it's a private message. Ignore other bots.
 			if (res.message.user.name !== 'hubot' &&
-				(res.message.user.name === res.message.user.room ||
+				(isDirectMessage(res) ||
 				checkBotNameInMessage(botName, res.message.text, robot))) {
 				// Remove the bot name from the bot statement
 				let text = stripBotName(botName, res.message.text).trim();
