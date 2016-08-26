@@ -83,6 +83,13 @@ function isDirectMessage(res) {
 }
 
 /**
+ * Checks to see if the message came from a bot
+ */
+function isMessageFromBot(res) {
+	return res.message.user.name === 'hubot' || res.message.user.isBot;
+}
+
+/**
  * If a statement does not match any regular expressions for commands, then NLC/RE processing is
  * invoked to determine the class best fitting the statement and pulling parameter values from the
  * statement.
@@ -143,10 +150,15 @@ module.exports = function(robot) {
 	if (env.nlc_enabled) {
 		robot.logger.info(`${TAG} Registering Natural Language processing.`);
 		robot.catchAll((res) => {
-			// Respond only when the bot is addressed in a public room or if it's a private message. Ignore other bots.
-			if (res.message.user.name !== 'hubot' &&
-				(isDirectMessage(res) ||
-				checkBotNameInMessage(botName, res.message.text, robot))) {
+			// ignore other bots
+			if (isMessageFromBot(res)) {
+				return;
+			}
+			let directMessage = isDirectMessage(res);
+			let botAddressedInMessage = checkBotNameInMessage(botName, res.message.text, robot);
+
+			// Respond only when the bot is addressed in a public room or if it's a private message
+			if (directMessage || botAddressedInMessage) {
 				// Remove the bot name from the bot statement
 				let text = stripBotName(botName, res.message.text).trim();
 				// make sure we have more than one word in the text
@@ -176,9 +188,14 @@ module.exports = function(robot) {
 	else {
 		robot.logger.info(`${TAG} Registering simple catchAll.  Natural Language processing is disabled.`);
 		robot.catchAll((res) => {
-			if (res.message.user.name !== 'hubot' &&
-				(res.message.user.name === res.message.user.room ||
-				checkBotNameInMessage(botName, res.message.text, robot))) {
+			// ignore other bots
+			if (isMessageFromBot(res)) {
+				return;
+			}
+			let directMessage = isDirectMessage(res);
+			let botAddressedInMessage = checkBotNameInMessage(botName, res.message.text, robot);
+
+			if (directMessage || botAddressedInMessage) {
 				// Remove the bot name from the bot statement
 				let text = stripBotName(botName, res.message.text).trim();
 				// make sure we have more than one word in the text
