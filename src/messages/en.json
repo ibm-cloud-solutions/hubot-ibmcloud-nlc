@@ -15,10 +15,11 @@
   "nlc.feedback.negative": "Sorry I misunderstood you. I'll report this mistake. Can you repeat your request in a different way?",
   "nlc.error.entities": "I had trouble extracting the entities from your request.  %s",
 
-  "nlc.train.prompt": "Do you want to start a new training session?",
   "nlc.train.decline": "Ok, I won't train for now.",
   "nlc.train.new.session": "Ok, I'm going to start a new training session. Training a classifier takes about 15 minutes. You can check the status with *nlc status*",
   "nlc.train.not.configured" : "I'm unable to start a new training session because the Natural Language service hasn't been configured.",
+  "nlc.train.prompt": "Do you want to start a new training session?",
+  "nlc.train.error": "Sorry, I encountered an error while training a new NLC instance.",
   "nlc.no.match": "Your request didn't match any supported actions.  To see what I can do type *help*.",
 
   "nlc.status.train.duration": "Classifier has been training for %s minute(s).",

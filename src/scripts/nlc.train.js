@@ -66,6 +66,7 @@ module.exports = function(robot) {
 					robot.emit('ibmcloud.formatter', {response: res, message: result.status_description});
 				}).catch(function(err){
 					robot.logger.error(`${TAG} Error while training a new classifier. Error=${JSON.stringify(err, null, 2)}`);
+					robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.train.error')});
 				});
 			}
 			else {
