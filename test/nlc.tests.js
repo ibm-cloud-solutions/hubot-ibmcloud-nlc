@@ -455,6 +455,17 @@ describe('Test the NLC interaction', function(){
 			});
 			room.user.say('mimiron', '@hubot high confidence result');
 		});
+
+		it('should respond with an error when NLC training fails', function(done){
+			room.robot.on('ibmcloud.formatter', function(event) {
+				if (event.message.indexOf(i18n.__('nlc.train.error')) >= 0) {
+					done();
+				}
+			});
+			room.user.say('mimiron', 'hubot nlc train').then(() => {
+				room.user.say('mimiron', 'yes');
+			});
+		});
 	});
 
 	describe('Test NLC with empty classifier list', function(){
@@ -497,6 +508,7 @@ describe('Test the NLC interaction', function(){
 			});
 			room.user.say('mimiron', 'hubot nlc list');
 		});
+
 	});
 
 	describe('Test auto approve command', function(){
