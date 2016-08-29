@@ -66,8 +66,8 @@ function checkBotNameInMessage(botName, text, robot) {
 	}
 	let reversedBotName = esrever.reverse(modifiedBotName);
 
-	let lookAheadRegExp = new RegExp(`(${modifiedBotName})(?\!\w)`);
-	let lookBehindRegExp = new RegExp(`(${reversedBotName})(?\!\w)`);
+	let lookAheadRegExp = new RegExp(`(${modifiedBotName})(?\!\\w)`);
+	let lookBehindRegExp = new RegExp(`(${reversedBotName})(?\!\\w)`);
 
 	lookAheadCheck = text.match(lookAheadRegExp) !== null;
 	lookBehindCheck = esrever.reverse(text).match(lookBehindRegExp) !== null;
@@ -86,7 +86,7 @@ function isDirectMessage(res) {
  * Checks to see if the message came from a bot
  */
 function isMessageFromBot(res) {
-	return res.message.user.name === 'hubot' || res.message.user.isBot;
+	return res.message.user.name === 'hubot' || res.message.user.is_bot;
 }
 
 /**
