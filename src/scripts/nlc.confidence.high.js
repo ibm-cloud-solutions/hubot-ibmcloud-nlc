@@ -46,9 +46,7 @@ module.exports = function(robot) {
 	let entityManager = new EntityManager();
 
 	robot.on('nlc.confidence.high', (res, classification) => {
-		// TODO: Remove displaying of top classes and confidence back to user.
-		robot.logger.info(`${TAG} High confidence detected.`);
-		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.high.process', classification.top_class)});
+		robot.logger.info(`${TAG} NLC High confidence. Will process [${classification.top_class}] for statement [${classification.text}].`);
 
 		// promise result is cached
 		nlcDb.open().then((db) => {
