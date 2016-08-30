@@ -88,7 +88,6 @@ module.exports = function(robot) {
 					let msg = i18n.__('nlc.data.summary', classifierId, totalClasses, totalStatements);
 					if (searchClassNames) {
 						msg += ' ' + i18n.__('nlc.data.filtering', searchClassNames);
-						// robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.data.filtering', searchClassNames)});
 					}
 
 					robot.emit('ibmcloud.formatter', {response: res, message: msg});
