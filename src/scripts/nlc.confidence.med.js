@@ -96,8 +96,7 @@ module.exports = function(robot) {
 			let resNum = parseInt(response, 10) - 1;
 			if (resNum < nOpts){
 				let selectedClass = classification.classes[resNum].class_name;
-				let reply = i18n.__('nlc.confidence.med.classify', classification.text, classification.classes[resNum].class_name);
-				robot.emit('ibmcloud.formatter', { response: res, message: reply });
+				robot.logger.info(`${TAG} NLC Med confidence. User selected class [${classification.classes[resNum].class_name}] for text [${classification.text}].`);
 
 				// Call emit target if specified with parameter values
 				nlcconfig.getClassEmitTarget(selectedClass).then((tgt) => {

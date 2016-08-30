@@ -1,10 +1,8 @@
 {
-  "nlc.confidence.low.prompt": "[Low confidence] Sorry I didn't get that, I've reported it. Please try to use different words to describe what you need.",
-  "nlc.confidence.med.prompt": "[Med confidence] Please help me understand your request by selecting an option.\n",
+  "nlc.confidence.low.prompt": "Sorry I didn't get that, I've reported it. Please try to use different words to describe what you need.",
+  "nlc.confidence.med.prompt": "Please help me understand your request by selecting an option.\n",
   "nlc.confidence.med.incorrect": "(%s) None of these options are correct.",
-  "nlc.confidence.med.classify": "OK, I'll remember that *%s* should be classified as *%s*. Note: You need to ask me to start a training session for me to really use this knowledge.",
-  "nlc.confidence.med.error": "Sorry I couldn't understand. Try to use different words to describe what you need.",
-  "nlc.confidence.high.process": "[High confidence] Will process top class [%s]",
+  "nlc.confidence.med.error": "Sorry I didn't have the right choice. Please try to use different words to describe what you need.",
 
   "nlc.data.summary": "NLC instance **%s** was trained with **%s** classifications and **%s** statements.",
   "nlc.data.title": "NLC Training Data",

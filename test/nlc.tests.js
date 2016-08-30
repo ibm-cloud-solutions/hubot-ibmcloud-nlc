@@ -223,7 +223,7 @@ describe('Test the NLC interaction', function(){
 							db.get(docId).then((doc) => {
 								expect(doc.logs.length).to.eql(3);
 								// test dialog was captured
-								expect(doc.logs[0].startsWith('[Med confidence]')).to.eql(true);
+								expect(doc.logs[0].startsWith(i18n.__('nlc.confidence.med.prompt'))).to.eql(true);
 								expect(doc.logs[1]).to.eql('log this - 1');
 								expect(doc.logs[2]).to.eql('log this - 2');
 								done();
