@@ -7,7 +7,8 @@
   "nlc.confidence.high.process": "[High confidence] Will process top class [%s]",
 
   "nlc.data.summary": "NLC instance **%s** was trained with **%s** classifications and **%s** statements.",
-  "nlc.data.title": "Training Data for classifier ID %s",
+  "nlc.data.title": "NLC Training Data",
+  "nlc.data.filtering": "Displaying classifications containing *%s*.",
 
   "nlc.error.fallback": "In the meantime type *help* for a list of available commands.",
   "nlc.error.unexpected.general": "I'm having trouble processing natural language requests. If the problem persist contact your bot administrator.",

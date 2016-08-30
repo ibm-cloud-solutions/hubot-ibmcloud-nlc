@@ -301,7 +301,7 @@ describe('Test the NLC interaction', function(){
 				}
 				if (event.attachments && event.attachments.length >= 1){
 					expect(event.attachments.length).to.eql(1);
-					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-5103');
+					expect(event.attachments[0].title).to.eql(i18n.__('nlc.data.title'));
 					expect(event.attachments[0].fields).to.have.length(2);
 					expect(event.attachments[0].fields[0].title).to.eql('classification');
 					expect(event.attachments[0].fields[0].value).to.eql('Sample classification text\nSample classification text 2\n');
@@ -316,18 +316,18 @@ describe('Test the NLC interaction', function(){
 		it('should reply with slack attachment with current classifier data', function(done){
 			room.robot.on('ibmcloud.formatter', function(event) {
 				if (event.message){
-					expect(event.message).to.be.eql('NLC instance **cd02b5x110-nlc-0000** was trained with **2** classifications and **3** statements.');
+					expect(event.message).to.be.eql(i18n.__('nlc.data.summary', 'cd02b5x110-nlc-0000', '2', '3') + ' ' + i18n.__('nlc.data.filtering', 'classification3'));
 				}
 				if (event.attachments && event.attachments.length >= 1){
 					expect(event.attachments.length).to.eql(1);
-					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-0000');
-					expect(event.attachments[0].fields).to.have.length(2);
-					expect(event.attachments[0].fields[0].title).to.eql('classification');
-					expect(event.attachments[0].fields[0].value).to.eql('Sample text\nSample text 2\n');
+					expect(event.attachments[0].title).to.eql(i18n.__('nlc.data.title'));
+					expect(event.attachments[0].fields).to.have.length(1);
+					expect(event.attachments[0].fields[0].title).to.eql('classification3');
+					expect(event.attachments[0].fields[0].value).to.eql('Sample text 3\n');
 					done();
 				}
 			});
-			room.user.say('mimiron', '@hubot nlc data classification cd02b5x110-nlc-0000');
+			room.user.say('mimiron', '@hubot nlc data classification3 cd02b5x110-nlc-0000');
 		});
 	});
 

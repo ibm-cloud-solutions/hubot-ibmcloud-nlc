@@ -16,9 +16,6 @@ var path = require('path');
 var TAG = path.basename(__filename);
 
 const env = require('../lib/env');
-// const utils = require('hubot-ibmcloud-utils').utils;
-// const palette = require('hubot-ibmcloud-utils').palette;
-// const Conversation = require('hubot-conversation');
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
 
 // --------------------------------------------------------------
@@ -78,8 +75,8 @@ module.exports = function(robot) {
 					let fields = [];
 					for (var key in trained_data) {
 						totalClasses++;
+						totalStatements += trained_data[key].length;
 						if (!searchClassNames || key.toLowerCase().indexOf(searchClassNames.toLowerCase()) >= 0) {
-							totalStatements += trained_data[key].length;
 							let values = '';
 							trained_data[key].forEach(function(stmt){
 								values += stmt + '\n';
@@ -89,10 +86,15 @@ module.exports = function(robot) {
 					}
 
 					let msg = i18n.__('nlc.data.summary', classifierId, totalClasses, totalStatements);
+					if (searchClassNames) {
+						msg += ' ' + i18n.__('nlc.data.filtering', searchClassNames);
+						// robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.data.filtering', searchClassNames)});
+					}
+
 					robot.emit('ibmcloud.formatter', {response: res, message: msg});
 					robot.emit('ibmcloud.formatter', {response: res, attachments: [
 						{
-							title: i18n.__('nlc.data.title', classifierId),
+							title: i18n.__('nlc.data.title'),
 							fields: fields,
 							short: true
 						}
