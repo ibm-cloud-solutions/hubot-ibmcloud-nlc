@@ -87,7 +87,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 			room.robot.on('ibmcloud.formatter', function(event) {
 				if (event.attachments && event.attachments.length >= 1){
 					expect(event.attachments.length).to.eql(1);
-					expect(event.attachments[0].title).to.eql('Training Data for classifier ID cd02b5x110-nlc-5103');
+					expect(event.attachments[0].title).to.eql(i18n.__('nlc.data.title'));
 					expect(event.attachments[0].fields.length).to.eql(2);
 					expect(event.attachments[0].fields[0].title).to.eql('classification');
 					expect(event.attachments[0].fields[0].value).to.eql('Sample classification text\nSample classification text 2\n');
