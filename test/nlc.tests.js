@@ -393,7 +393,6 @@ describe('Test the NLC interaction', function(){
 
 	it('should fail gracefully when Medium confidence classification not loaded in DB', function(done) {
 		room.robot.on('ibmcloud.formatter', function(event) {
-			console.log(event)
 			expect(event.message).to.be.a('string');
 			expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
 			done();
