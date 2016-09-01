@@ -83,6 +83,10 @@ module.exports = function(robot) {
 					robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.entities', error)});
 				});
 			}
+			else {
+				robot.logger.error(`${TAG} Could not find an emittarget and parameters for class ${classification.top_class}. Check the NLC configuration is correctly loaded and the Watson NLC instance is trained with the latest data.`);
+				robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
+			}
 		}).catch((error) => {
 			robot.logger.error(`${TAG} Error occurred trying to obtain emit target for top class; top class = ${classification.top_class}; error = ${error}.`);
 			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});

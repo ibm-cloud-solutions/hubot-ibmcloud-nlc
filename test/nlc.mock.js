@@ -16,6 +16,7 @@ const mockMediumCfResult = require(path.resolve(__dirname, 'resources', 'mock.cl
 const mockMediumNoCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyMediumNoClassResult.json'));
 const mockHighCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyHighResult.json'));
 const mockNegFbResult = require(path.resolve(__dirname, 'resources', 'mock.classifyNegFbResult.json'));
+const mockUnknownClassResult = require(path.resolve(__dirname, 'resources', 'mock.classifyUnknownClassResult.json'));
 
 const mockClassifierList = require(path.resolve(__dirname, 'resources', 'mock.classifierList.json'));
 const mockClassifierStatusAvailable = require(path.resolve(__dirname, 'resources', 'mock.classifierAvailable.json'));
@@ -101,6 +102,12 @@ module.exports = {
 			text: 'high confidence result'
 		})
 		.reply(500, 'Some 500 error message from the NLC service.');
+
+		// Mock route to get classification data.
+		nlcErrorScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
+			text: 'classification unknown'
+		})
+		.reply(200, mockUnknownClassResult);
 	},
 
 	setupMockEmpty: function(){

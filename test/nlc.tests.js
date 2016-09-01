@@ -109,6 +109,12 @@ describe('Test the NLC interaction', function(){
 				description: 'Description for weather alerts classification',
 				emittarget: 'weather.js'
 			}).then(() => {
+				// add class without an emitTarget
+				return db.put({
+					_id: 'weather.js',
+					emittarget: 'weather.js'
+				});
+			}).then(() => {
 				// add class mapping for negative feedback testing
 				return db.put({
 					_id: 'nlc.feedback.negative',
@@ -465,6 +471,15 @@ describe('Test the NLC interaction', function(){
 			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 			});
+		});
+
+		it('should fail gracefully when classification not loaded in DB', function(done) {
+			room.robot.on('ibmcloud.formatter', function(event) {
+				expect(event.message).to.be.a('string');
+				expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+				done();
+			});
+			room.user.say('mimiron', 'hubot classification undefined');
 		});
 	});
 
