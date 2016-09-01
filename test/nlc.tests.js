@@ -382,6 +382,27 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
+	it('should fail gracefully when High confidence classification not loaded in DB', function(done) {
+		room.robot.on('ibmcloud.formatter', function(event) {
+			expect(event.message).to.be.a('string');
+			expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+			done();
+		});
+		room.user.say('mimiron', 'hubot High classification undefined');
+	});
+
+	it('should fail gracefully when Medium confidence classification not loaded in DB', function(done) {
+		room.robot.on('ibmcloud.formatter', function(event) {
+			console.log(event)
+			expect(event.message).to.be.a('string');
+			expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+			done();
+		});
+		room.user.say('mimiron', 'hubot Medium classification undefined').then(() => {
+			room.user.say('mimiron', '1');
+		});
+	});
+
 	describe('Test ENV setup', function(){
 		before(function() {
 			env.nlc_enabled = false;
@@ -445,6 +466,7 @@ describe('Test the NLC interaction', function(){
 			});
 			room.user.say('mimiron', '@hubot nlc data');
 		});
+
 	});
 
 
@@ -471,15 +493,6 @@ describe('Test the NLC interaction', function(){
 			room.user.say('mimiron', 'hubot nlc train').then(() => {
 				room.user.say('mimiron', 'yes');
 			});
-		});
-
-		it('should fail gracefully when classification not loaded in DB', function(done) {
-			room.robot.on('ibmcloud.formatter', function(event) {
-				expect(event.message).to.be.a('string');
-				expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
-				done();
-			});
-			room.user.say('mimiron', 'hubot classification undefined');
 		});
 	});
 

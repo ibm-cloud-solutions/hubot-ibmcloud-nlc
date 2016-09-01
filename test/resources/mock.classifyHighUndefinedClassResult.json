@@ -1,6 +1,6 @@
 { "classifier_id": "cd02b5x110-nlc-5110",
   "url": "https://watson-nlc-api/v1/classifiers/cd02b5x110-nlc-5110",
-  "text" : "high confidence result",
+  "text" : "High classification undefined",
   "top_class": "classification_undefined",
   "classes":
    [ { "class_name": "classification_undefined", "confidence": 0.9662086742164803 },
