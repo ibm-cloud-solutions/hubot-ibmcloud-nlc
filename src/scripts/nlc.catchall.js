@@ -171,7 +171,7 @@ module.exports = function(robot) {
 						if (reject.status === 'Training') {
 							robot.logger.info(`${TAG}: Unable to use Natural Language. ${reject.status_description}`);
 							robot.emit('ibmcloud.formatter', {response: res, message: reject.status_description});
-							robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.error.fallback')});
+							robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.error.unexpected.general')});
 						}
 						else {
 							throw reject;
@@ -179,7 +179,6 @@ module.exports = function(robot) {
 					}).catch((error) => {
 						robot.logger.error(`${TAG}: Error occurred trying to classify statement using NLC; statement = ${text}; error = ${error.error}.`);
 						robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.error.unexpected.general')});
-						robot.emit('ibmcloud.formatter', {response: res, message: i18n.__('nlc.error.fallback')});
 					});
 				}
 			}

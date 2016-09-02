@@ -16,6 +16,8 @@ const mockMediumCfResult = require(path.resolve(__dirname, 'resources', 'mock.cl
 const mockMediumNoCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyMediumNoClassResult.json'));
 const mockHighCfResult = require(path.resolve(__dirname, 'resources', 'mock.classifyHighResult.json'));
 const mockNegFbResult = require(path.resolve(__dirname, 'resources', 'mock.classifyNegFbResult.json'));
+const mockHighUndefinedClassResult = require(path.resolve(__dirname, 'resources', 'mock.classifyHighUndefinedClassResult.json'));
+const mockMedUndefinedClassResult = require(path.resolve(__dirname, 'resources', 'mock.classifyMedUndefinedClassResult.json'));
 
 const mockClassifierList = require(path.resolve(__dirname, 'resources', 'mock.classifierList.json'));
 const mockClassifierStatusAvailable = require(path.resolve(__dirname, 'resources', 'mock.classifierAvailable.json'));
@@ -73,11 +75,23 @@ module.exports = {
 		.reply(200, mockMediumCfResult);
 
 		// Mock route to get classification data.
-		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', function(body) {
-			return body.text.includes('high');
+		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
+			text: 'high confidence result'
 		})
 		.reply(200, mockHighCfResult);
 
+
+		// Mock route to get classification data.
+		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
+			text: 'High classification undefined'
+		})
+		.reply(200, mockHighUndefinedClassResult);
+
+		// Mock route to get classification data.
+		nlcScope.post('/v1/classifiers/cd02b5x110-nlc-5103/classify', {
+			text: 'Medium classification undefined'
+		})
+		.reply(200, mockMedUndefinedClassResult);
 	},
 
 	setupMockErrors: function(){
@@ -101,6 +115,7 @@ module.exports = {
 			text: 'high confidence result'
 		})
 		.reply(500, 'Some 500 error message from the NLC service.');
+
 	},
 
 	setupMockEmpty: function(){

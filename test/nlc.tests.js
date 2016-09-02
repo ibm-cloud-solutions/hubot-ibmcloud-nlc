@@ -109,6 +109,12 @@ describe('Test the NLC interaction', function(){
 				description: 'Description for weather alerts classification',
 				emittarget: 'weather.js'
 			}).then(() => {
+				// add class without an emitTarget
+				return db.put({
+					_id: 'weather.js',
+					emittarget: 'weather.js'
+				});
+			}).then(() => {
 				// add class mapping for negative feedback testing
 				return db.put({
 					_id: 'nlc.feedback.negative',
@@ -376,6 +382,26 @@ describe('Test the NLC interaction', function(){
 		});
 	});
 
+	it('should fail gracefully when High confidence classification not loaded in DB', function(done) {
+		room.robot.on('ibmcloud.formatter', function(event) {
+			expect(event.message).to.be.a('string');
+			expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+			done();
+		});
+		room.user.say('mimiron', 'hubot High classification undefined');
+	});
+
+	it('should fail gracefully when Medium confidence classification not loaded in DB', function(done) {
+		room.robot.on('ibmcloud.formatter', function(event) {
+			expect(event.message).to.be.a('string');
+			expect(event.message).to.contain(i18n.__('nlc.error.unexpected.general'));
+			done();
+		});
+		room.user.say('mimiron', 'hubot Medium classification undefined').then(() => {
+			room.user.say('mimiron', '1');
+		});
+	});
+
 	describe('Test ENV setup', function(){
 		before(function() {
 			env.nlc_enabled = false;
@@ -439,6 +465,7 @@ describe('Test the NLC interaction', function(){
 			});
 			room.user.say('mimiron', '@hubot nlc data');
 		});
+
 	});
 
 
