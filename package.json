@@ -45,7 +45,12 @@
     "pouchdb": "^5.4.5"
   },
   "peerDependencies": {
-    "hubot": "^2.19.0"
+    "hubot": "^2.19.0",
+    "hubot-conversation": "^1.1.1",
+    "hubot-ibmcloud-cognitive-entities": "latest",
+    "hubot-ibmcloud-cognitive-lib": "latest",
+    "hubot-ibmcloud-utils": "latest",
+    "i18n-2": "^0.6.3",
   },
   "engines": {
     "node": ">= 4.2.0"
@@ -56,11 +61,6 @@
     "index.js"
   ],
   "dependencies": {
-    "hubot-ibmcloud-cognitive-lib": ">=0.0.37",
-    "hubot-ibmcloud-cognitive-entities": ">=0.0.4",
-    "hubot-ibmcloud-utils": ">=0.0.8",
-    "hubot-conversation": "^1.1.1",
-    "i18n-2": "^0.6.3",
     "esrever": "^0.2.0"
   }
 }
