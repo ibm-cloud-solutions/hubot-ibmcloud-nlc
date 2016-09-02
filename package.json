@@ -47,9 +47,9 @@
   "peerDependencies": {
     "hubot": "^2.19.0",
     "hubot-conversation": "^1.1.1",
-    "hubot-ibmcloud-cognitive-entities": "latest",
-    "hubot-ibmcloud-cognitive-lib": "latest",
-    "hubot-ibmcloud-utils": "latest",
+    "hubot-ibmcloud-cognitive-entities": ">=0.0.4",
+    "hubot-ibmcloud-cognitive-lib": ">=0.0.40",
+    "hubot-ibmcloud-utils": ">=0.0.14",
     "i18n-2": "^0.6.3"
   },
   "engines": {
