@@ -10,9 +10,9 @@ const path = require('path');
 const env = require(path.resolve(__dirname, '..', 'lib', 'env'));
 const NLCManager = require('hubot-ibmcloud-cognitive-lib').nlcManager;
 
-var nlcManager;
+let nlcManager;
 if (env.nlc_enabled) {
-	var watson_nlc_opts = {
+	let watson_nlc_opts = {
 		url: env.nlc_url,
 		username: env.nlc_username,
 		password: env.nlc_password,

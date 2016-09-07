@@ -61,7 +61,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 					done();
 				}
 			});
-			var res = { message: {text: 'status of my classifier', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'status of my classifier', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.status', res, {});
 		});
 	});
@@ -77,7 +77,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 					done();
 				}
 			});
-			var res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'list my classifiers', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.list', res, {});
 		});
 	});
@@ -94,7 +94,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 					done();
 				}
 			});
-			var res = { message: {text: 'data for my classifier', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'data for my classifier', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.data', res, {});
 		});
 	});
@@ -113,7 +113,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 
-			var res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'help with nlc', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.management.help', res, {});
 		});
 	});
@@ -128,7 +128,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				}
 			});
 
-			var res = { message: {text: 'I need some help', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'I need some help', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.help', res, {});
 		});
 	});
@@ -140,7 +140,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			var res = { message: {text: 'turn auto approve off', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'turn auto approve off', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.auto.approve', res, { autoapprove: 'on' });
 		});
 
@@ -150,7 +150,7 @@ describe('Interacting with NLC commands via Natural Language', function() {
 				expect(event.message).to.contain(i18n.__('nlc.auto.approve.set', 'true'));
 				done();
 			});
-			var res = { message: {text: 'auto approve setting', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'auto approve setting', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.auto.approve', res, {});
 		});
 	});

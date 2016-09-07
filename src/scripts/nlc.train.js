@@ -49,7 +49,7 @@ i18n.setLocale('en');
 const TRAIN = /nlc (train|retrain)$/i;
 
 module.exports = function(robot) {
-	var switchBoard = new Conversation(robot);
+	let switchBoard = new Conversation(robot);
 
 	robot.on('nlc.train', (res) => {
 		robot.logger.debug(`${TAG}: nlc.train - Natural Language match.`);

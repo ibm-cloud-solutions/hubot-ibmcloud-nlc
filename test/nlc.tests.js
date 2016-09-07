@@ -600,7 +600,7 @@ describe('Test the NLC interaction with getEntities failure', function(){
 
 	context('user says a statement', function() {
 		it('should emit a medium classification event', function(done) {
-			var replyFn = function(msg) {
+			let replyFn = function(msg) {
 				if (msg.includes('(1)')) {
 					room.user.say('mimiron', '1');
 				}
@@ -613,7 +613,7 @@ describe('Test the NLC interaction with getEntities failure', function(){
 					done();
 				}
 			});
-			var res = { message: {text: 'Medium confidence', user: {id: 'mimiron'}}, response: room, reply: replyFn };
+			let res = { message: {text: 'Medium confidence', user: {id: 'mimiron'}}, response: room, reply: replyFn };
 			room.robot.emit('nlc.confidence.med', res, badparamClassification);
 		});
 
@@ -623,7 +623,7 @@ describe('Test the NLC interaction with getEntities failure', function(){
 					done();
 				}
 			});
-			var res = { message: {text: 'High confidence', user: {id: 'mimiron'}}, response: room };
+			let res = { message: {text: 'High confidence', user: {id: 'mimiron'}}, response: room };
 			room.robot.emit('nlc.confidence.high', res, badparamClassification);
 		});
 	});

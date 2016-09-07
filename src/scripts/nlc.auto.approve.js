@@ -64,7 +64,7 @@ module.exports = function(robot) {
 
 	function updateAutoApprove(res, value){
 		if (env.nlc_enabled) {
-			var approve;
+			let approve;
 			if (value) {
 				approve = ['on', 'true'].indexOf(value) > -1;
 				nlcconfig.setAutoApprove(approve);
@@ -72,7 +72,7 @@ module.exports = function(robot) {
 			}
 			else {
 				approve = nlcconfig.getAutoApprove();
-				var message = `${i18n.__('nlc.auto.approve.set', approve)} ${i18n.__('nlc.auto.approve.info')}`;
+				let message = `${i18n.__('nlc.auto.approve.set', approve)} ${i18n.__('nlc.auto.approve.info')}`;
 				robot.emit('ibmcloud.formatter', { response: res, message: message});
 			}
 		}

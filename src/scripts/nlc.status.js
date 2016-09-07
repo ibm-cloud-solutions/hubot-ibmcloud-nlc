@@ -18,8 +18,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const env = require('../lib/env');
 const utils = require('hubot-ibmcloud-utils').utils;
@@ -48,7 +48,7 @@ i18n.setLocale('en');
 const CLASSIFIER_STATUS = /nlc (status)$/i;
 
 module.exports = function(robot) {
-	var switchBoard = new Conversation(robot);
+	let switchBoard = new Conversation(robot);
 
 	// Natural Language match
 	robot.on('nlc.status', (res, parameters) => {
@@ -66,13 +66,13 @@ module.exports = function(robot) {
 		if (env.nlc_enabled) {
 			watsonServices.nlc.classifierList().then((list) => {
 				// Filter classifiers that match Hubot NLC classifier name (default is default-hubot-classifer)
-				var filteredClassifiers = list.filter((classifier) => {
+				let filteredClassifiers = list.filter((classifier) => {
 					return classifier.name === env.nlc_classifier;
 				});
 
 				// Respond with most recent Available/Training classifier
 				if (filteredClassifiers.length > 0) {
-					var classifier = filteredClassifiers[0];
+					let classifier = filteredClassifiers[0];
 					robot.emit('ibmcloud.formatter', {
 						response: res,
 						attachments: [{
@@ -87,9 +87,9 @@ module.exports = function(robot) {
 					});
 
 					// Check for new Training classifier and notify how long it's been training for
-					for (var i = 0; i < filteredClassifiers.length; i++) {
+					for (let i = 0; i < filteredClassifiers.length; i++) {
 						if (filteredClassifiers[i].status === 'Training') {
-							var message = i18n.__('nlc.status.other.training', filteredClassifiers[i].duration);
+							let message = i18n.__('nlc.status.other.training', filteredClassifiers[i].duration);
 							robot.emit('ibmcloud.formatter', {response: res, message: message});
 							break;
 						}
