@@ -82,10 +82,10 @@ module.exports = function(robot) {
 		let l = classification.classes.length;
 		let thresh = env.lowThreshold * 100;
 		for (let i = 0; i < l; i++){
-			var confidence = parseFloat(classification.classes[i].confidence * 100).toFixed(2);
+			let confidence = parseFloat(classification.classes[i].confidence * 100).toFixed(2);
 			if (confidence > thresh){
 				let pad = function(num, size) {
-					var s = num + '';
+					let s = num + '';
 					while (s.length < size) s = ' ' + s;
 					return s;
 				};
@@ -110,7 +110,7 @@ module.exports = function(robot) {
 						// Obtain statement from res removing the bot name
 						let text = res.message.text.replace(robot.name, '').trim();
 						entityManager.getEntities(robot, res, text, selectedClass, tgt.parameters).then((parameters) => {
-							var authEmitParams = {
+							let authEmitParams = {
 								emitTarget: tgt.target,
 								emitParameters: parameters
 							};

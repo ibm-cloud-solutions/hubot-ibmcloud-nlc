@@ -18,8 +18,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const env = require('../lib/env');
 const watsonServices = require(path.resolve(__dirname, '..', 'lib', 'watsonServices'));
@@ -79,7 +79,7 @@ module.exports = function(robot) {
 					let totalStatements = 0;
 					let totalClasses = 0;
 					let fields = [];
-					for (var key in trained_data) {
+					for (let key in trained_data) {
 						totalClasses++;
 						totalStatements += trained_data[key].length;
 						if (!searchClassNames || key.toLowerCase().indexOf(searchClassNames.toLowerCase()) >= 0) {

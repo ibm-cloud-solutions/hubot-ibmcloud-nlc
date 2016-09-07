@@ -49,7 +49,7 @@ i18n.setLocale('en');
  * Strips the bot name from the given statement.
  */
 function stripBotName(botName, text) {
-	var nameToken = new RegExp('(^|\\s)@?' + botName + ':?\\s', 'g');
+	let nameToken = new RegExp('(^|\\s)@?' + botName + ':?\\s', 'g');
 	return text.replace(nameToken, ' ').trim();
 }
 

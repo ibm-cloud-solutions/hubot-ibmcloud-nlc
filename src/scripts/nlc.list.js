@@ -17,8 +17,8 @@
   */
 'use strict';
 
-var path = require('path');
-var TAG = path.basename(__filename);
+const path = require('path');
+const TAG = path.basename(__filename);
 
 const env = require('../lib/env');
 const palette = require('hubot-ibmcloud-utils').palette;
@@ -59,8 +59,8 @@ module.exports = function(robot) {
 	function getClassifierList(res) {
 		if (env.nlc_enabled) {
 			watsonServices.nlc.classifierList().then((list) => {
-				var attachments = list.map((classifier) => {
-					var attachment = {
+				let attachments = list.map((classifier) => {
+					let attachment = {
 						title: classifier.name,
 						color: classifier.status === 'Available' ? palette.available : palette.training
 					};

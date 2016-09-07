@@ -70,9 +70,9 @@ module.exports = function(robot) {
 		nlcconfig.getClassEmitTarget(classification.top_class).then((tgt) => {
 			if (tgt) {
 				// Obtain statement from res removing the bot name
-				var text = res.message.text.replace(robot.name, '').trim();
+				let text = res.message.text.replace(robot.name, '').trim();
 				entityManager.getEntities(robot, res, text, classification.top_class, tgt.parameters).then((parameters) => {
-					var authEmitParams = {
+					let authEmitParams = {
 						emitTarget: tgt.target,
 						emitParameters: parameters
 					};
