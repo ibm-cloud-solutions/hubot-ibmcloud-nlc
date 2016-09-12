@@ -17,6 +17,14 @@ let settings = {
 	paramParsingDisabled: process.env.PARAM_PARSING_DISABLED || false
 };
 
+// nlc service bound to application, overrides any other settings.
+if (process.env.VCAP_SERVICES && JSON.parse(process.env.VCAP_SERVICES).natural_language_classifier) {
+	let credentials = JSON.parse(process.env.VCAP_SERVICES).natural_language_classifier[0].credentials;
+	settings.nlc_url = credentials.url;
+	settings.nlc_username = credentials.username;
+	settings.nlc_password = credentials.password;
+}
+
 settings.nlc_enabled = settings.nlc_username && settings.nlc_password;
 
 if (!settings.nlc_url) {
