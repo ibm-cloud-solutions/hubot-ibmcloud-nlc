@@ -54,7 +54,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	let entityManager = new EntityManager();
+	let entityManager = new EntityManager(robot);
 	let switchBoard = new Conversation(robot);
 
 	robot.on('nlc.confidence.med', (res, classification) => {

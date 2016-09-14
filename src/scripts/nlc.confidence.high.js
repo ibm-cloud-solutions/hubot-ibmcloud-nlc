@@ -50,7 +50,7 @@ i18n.setLocale('en');
 
 module.exports = function(robot) {
 
-	let entityManager = new EntityManager();
+	let entityManager = new EntityManager(robot);
 
 	robot.on('nlc.confidence.high', (res, classification) => {
 		robot.logger.info(`${TAG} NLC High confidence. Will process [${classification.top_class}] for statement [${classification.text}].`);
