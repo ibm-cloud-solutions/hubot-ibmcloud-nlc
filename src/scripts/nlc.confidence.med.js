@@ -58,25 +58,19 @@ module.exports = function(robot) {
 	let switchBoard = new Conversation(robot);
 
 	robot.on('nlc.confidence.med', (res, classification) => {
-		// promise result is cached
-		nlcDb.open().then((db) => {
-			let descriptionPromises = classification.classes.map((clz) => {
-				return nlcconfig.getClassEmitTarget(clz.class_name).then((classData) => {
-					return (classData && classData.description) ? classData.description : clz.class_name;
-				});
+		let descriptionPromises = classification.classes.map((clz) => {
+			return nlcconfig.getClassEmitTarget(clz.class_name).then((classData) => {
+				return (classData && classData.description) ? classData.description : clz.class_name;
 			});
+		});
 
-			Promise.all(descriptionPromises).then((descriptions) => {
-				handle(db, res, classification, robot, descriptions);
-			});
-		}).catch((err) => {
-			robot.logger.error(`${TAG}: Error processing medium confidence NLC result. Error=${err}`);
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.process.error')});
+		Promise.all(descriptionPromises).then((descriptions) => {
+			handle(res, classification, robot, descriptions);
 		});
 	});
 
 
-	function handle(db, res, classification, robot, descriptions){
+	function handle(res, classification, robot, descriptions){
 		let prompt = i18n.__('nlc.confidence.med.prompt');
 		let nOpts = 0;
 		let l = classification.classes.length;
@@ -131,7 +125,7 @@ module.exports = function(robot) {
 				});
 
 				// Record medium confidence (learned) NLC result for feedback loop.
-				db.post(classification, 'learned', selectedClass).then(() => {
+				nlcDb.post(classification, 'learned', selectedClass).then(() => {
 					let userId = res.envelope.user.id;
 					logUtils.logMessage(robot, res, userId, `${prompt}\n${resNum}`);
 					robot.logger.debug(`${TAG} Saved medium confidence (learned) NLC result for learning.`);
@@ -143,7 +137,7 @@ module.exports = function(robot) {
 				robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.med.error')});
 
 				// Record medium confidence (unclassified) NLC result for feedback loop.
-				db.post(classification, 'unclassified').then((doc) => {
+				nlcDb.post(classification, 'unclassified').then((doc) => {
 					let userId = res.envelope.user.id;
 					logUtils.logMessage(robot, res, userId, `${prompt}\n${nOpts}`, doc.id);
 					robot.logger.debug(`${TAG} Saved medium confidence (unclassified) NLC result for learning.`);

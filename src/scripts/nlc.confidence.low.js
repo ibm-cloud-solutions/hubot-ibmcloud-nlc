@@ -54,16 +54,12 @@ module.exports = function(robot) {
 		robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.confidence.low.prompt')});
 
 		// promise result is cached
-		nlcDb.open().then((db) => {
-			handle(db, res, classification, robot);
-		}).catch((err) => {
-			robot.logger.error(`${TAG} Error processing low confidence NLC result. Error=${err}`);
-		});
+		handle(res, classification, robot);
 	});
 
-	function handle(db, res, classification, robot){
+	function handle(res, classification, robot){
 		// Record low confidence (unclassified) NLC result for feedback loop.
-		db.post(classification, 'unclassified').then((doc) => {
+		nlcDb.post(classification, 'unclassified').then((doc) => {
 			let userId = res.envelope.user.id;
 			utils.logMessage(robot, res, userId, null, doc.id);
 			robot.logger.debug(`${TAG} Saved low confidence (unclassified) NLC result for learning.`);

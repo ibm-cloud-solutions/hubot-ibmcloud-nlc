@@ -68,29 +68,25 @@ function logMessage(robot, res, userId, text, tgt) {
 
 
 function handleFeedback(robot, res, info){
-	nlcDb.open().then((db) => {
-		if (info && info.id){
-			// low / med event log path
-			// save additional input texts to original 'target' document
-			db.get(info.id).then((doc) => {
-				doc.logs = info.logs;
-				return db.put(doc);
-			}).catch((err) => {
-				robot.logger.error(err);
-			});
+	if (info && info.id){
+		// low / med event log path
+		// save additional input texts to original 'target' document
+		nlcDb.get(info.id).then((doc) => {
+			doc.logs = info.logs;
+			return nlcDb.put(doc);
+		}).catch((err) => {
+			robot.logger.error(err);
+		});
+	}
+	else {
+		// get user logs from the brain
+		let userId = res.envelope.user.id;
+		let key = userId + constants.LOGGER_KEY_SUFFIX;
+		let info = robot.brain.get(key);
+		if (info && info.logs){
+			return nlcDb.post(info.logs, 'negative_fb');
 		}
-		else {
-			// get user logs from the brain
-			let userId = res.envelope.user.id;
-			let key = userId + constants.LOGGER_KEY_SUFFIX;
-			let info = robot.brain.get(key);
-			if (info && info.logs){
-				return db.post(info.logs, 'negative_fb');
-			}
-		}
-	}).catch((err) => {
-		robot.logger.error(err);
-	});
+	}
 };
 
 

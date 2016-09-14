@@ -55,17 +55,11 @@ module.exports = function(robot) {
 	robot.on('nlc.confidence.high', (res, classification) => {
 		robot.logger.info(`${TAG} NLC High confidence. Will process [${classification.top_class}] for statement [${classification.text}].`);
 
-		// promise result is cached
-		nlcDb.open().then((db) => {
-			handle(db, res, classification, robot);
-		}).catch((err) => {
-			robot.logger.error(`${TAG}: Error processing high confidence NLC for ${classification.top_class}. Error=${err}`);
-			robot.emit('ibmcloud.formatter', { response: res, message: i18n.__('nlc.error.unexpected.general')});
-		});
+		handle(res, classification, robot);
 	});
 
 
-	function handle(db, res, classification, robot){
+	function handle(res, classification, robot){
 		// Call emit target if specified with parameter values
 		nlcconfig.getClassEmitTarget(classification.top_class).then((tgt) => {
 			if (tgt) {
@@ -93,7 +87,7 @@ module.exports = function(robot) {
 		});
 
 		// Record high confidence (classified) NLC result for feedback loop metrics.
-		db.post(classification, 'classified', classification.top_class).then(() => {
+		nlcDb.post(classification, 'classified', classification.top_class).then(() => {
 			robot.logger.debug(`${TAG} Saved high confidence (classified) NLC result for feedback loop metrics.`);
 		}).catch((err) => {
 			robot.logger.error(`${TAG} Error saving high confidence (classified) NLC feedback data. Error=${err}`);
