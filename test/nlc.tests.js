@@ -97,7 +97,6 @@ describe('Load modules through index', function() {
 
 describe('Test the NLC interaction', function(){
 	let room;
-	let db;
 
 	before(function() {
 		mockNLP.setupMockery();
