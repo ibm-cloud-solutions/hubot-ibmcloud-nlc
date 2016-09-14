@@ -27,13 +27,13 @@ const i18n = new (require('i18n-2'))({
 // At some point we need to toggle this setting based on some user input.
 i18n.setLocale('en');
 
-function waitForDocType(db, type, rev, text){
+function waitForDocType(type, rev, text){
 	let docId;
 
 	return sprinkles.eventually({
 		timeout: timeout
 	}, function() {
-		return db.info({
+		return nlcDb.info({
 			include_docs: true
 		}).then((allDocs) => {
 			let found = false;
@@ -97,45 +97,41 @@ describe('Load modules through index', function() {
 
 describe('Test the NLC interaction', function(){
 	let room;
-	let db;
 
 	before(function() {
 		mockNLP.setupMockery();
-		return nlcDb.open().then((res) => {
-			db = res;
-			return db.put({
-				// add class with description
-				_id: 'weather.alerts.js',
-				description: 'Description for weather alerts classification',
+		return nlcDb.put({
+			// add class with description
+			_id: 'weather.alerts.js',
+			description: 'Description for weather alerts classification',
+			emittarget: 'weather.js'
+		}).then(() => {
+			// add class without an emitTarget
+			return nlcDb.put({
+				_id: 'weather.js',
 				emittarget: 'weather.js'
-			}).then(() => {
-				// add class without an emitTarget
-				return db.put({
-					_id: 'weather.js',
-					emittarget: 'weather.js'
-				});
-			}).then(() => {
-				// add class mapping for negative feedback testing
-				return db.put({
-					_id: 'nlc.feedback.negative',
-					emittarget: 'nlc.feedback.negative'
-				});
-			}).then(() => {
-				// add classifier data for current classifier, only if it hasn't been added. Data may exist if nlc.cognitive.tests runs first.
-				return db.get('cd02b5x110-nlc-5103').catch(() => {
-					return db.put({
-						_id: 'cd02b5x110-nlc-5103',
-						type: 'classifier_data',
-						trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
-					});
-				});
-			}).then(() => {
-				// add classifier data
-				return db.put({
-					_id: 'cd02b5x110-nlc-0000',
+			});
+		}).then(() => {
+			// add class mapping for negative feedback testing
+			return nlcDb.put({
+				_id: 'nlc.feedback.negative',
+				emittarget: 'nlc.feedback.negative'
+			});
+		}).then(() => {
+			// add classifier data for current classifier, only if it hasn't been added. Data may exist if nlc.cognitive.tests runs first.
+			return nlcDb.get('cd02b5x110-nlc-5103').catch(() => {
+				return nlcDb.put({
+					_id: 'cd02b5x110-nlc-5103',
 					type: 'classifier_data',
-					trainedData: 'Sample text,classification\nSample text 2,classification\nSample text 3,classification3'
+					trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
 				});
+			});
+		}).then(() => {
+			// add classifier data
+			return nlcDb.put({
+				_id: 'cd02b5x110-nlc-0000',
+				type: 'classifier_data',
+				trainedData: 'Sample text,classification\nSample text 2,classification\nSample text 3,classification3'
 			});
 		});
 	});
@@ -155,7 +151,7 @@ describe('Test the NLC interaction', function(){
 			room.robot.on('nlc.confidence.low', (res, classification) => {
 				if (cntr === 0){
 					// check the database for the document miss
-					waitForDocType(db, 'unclassified').then((id) => {
+					waitForDocType('unclassified').then((id) => {
 						// say something else and see if it is logged
 						docId = id;
 						room.user.say('mimiron', 'hubot log this - 1');
@@ -166,8 +162,8 @@ describe('Test the NLC interaction', function(){
 				if (cntr === env.messagesToSave){
 					// check doc has a log field
 					// wait for a document update with the log messages
-					waitForDocType(db, 'unclassified', 2).then(() => {
-						db.get(docId).then((doc) => {
+					waitForDocType('unclassified', 2).then(() => {
+						nlcDb.get(docId).then((doc) => {
 							expect(doc.logs).to.exist;
 							expect(doc.logs.length).to.eql(3);
 							expect(doc.logs[0]).to.eql('log this - 1');
@@ -195,8 +191,8 @@ describe('Test the NLC interaction', function(){
 					// reply with correct
 					room.user.say('mimiron', '2');
 					// check the database for the document training
-					return waitForDocType(db, 'learned').then((docId) => {
-						db.get(docId).then((doc) => {
+					return waitForDocType('learned').then((docId) => {
+						nlcDb.get(docId).then((doc) => {
 							done();
 						});
 					});
@@ -218,15 +214,15 @@ describe('Test the NLC interaction', function(){
 					room.user.say('mimiron', '3');
 
 					// check the database for the document training
-					return waitForDocType(db, 'unclassified', 1, msg).then((docId) => {
+					return waitForDocType('unclassified', 1, msg).then((docId) => {
 						// say a bunch to cause the log to be saved
 						room.user.say('mimiron', 'hubot log this - 1');
 						room.user.say('mimiron', 'hubot log this - 2');
 						// the next message won't be logged
 						room.user.say('mimiron', 'hubot log this - 3');
 
-						return waitForDocType(db, 'unclassified', 2, msg).then((docId) => {
-							db.get(docId).then((doc) => {
+						return waitForDocType('unclassified', 2, msg).then((docId) => {
+							nlcDb.get(docId).then((doc) => {
 								expect(doc.logs.length).to.eql(3);
 								// test dialog was captured
 								expect(doc.logs[0].startsWith(i18n.__('nlc.confidence.med.prompt'))).to.eql(true);
@@ -246,7 +242,7 @@ describe('Test the NLC interaction', function(){
 		it('should emit a high classification event', function(done) {
 			room.robot.on('nlc.confidence.high', (res, classification) => {
 				// check the database for the document hit
-				waitForDocType(db, 'classified').then(() => {
+				waitForDocType('classified').then(() => {
 					done();
 				});
 			});
@@ -267,8 +263,8 @@ describe('Test the NLC interaction', function(){
 
 			room.robot.on('nlc.feedback.negative', (res) => {
 				// check the database for the document hit
-				waitForDocType(db, 'negative_fb').then((docId) => {
-					db.get(docId).then((doc) => {
+				waitForDocType('negative_fb').then((docId) => {
+					nlcDb.get(docId).then((doc) => {
 						expect(doc.logs).to.exist;
 						expect(doc.logs.length).to.eql(6);
 						expect(doc.logs[5]).to.eql('negative feedback');
@@ -561,7 +557,6 @@ describe('Test the NLC interaction', function(){
 
 describe('Test the NLC interaction with getEntities failure', function(){
 	let room;
-	let db;
 	let badparamClassification = {
 		text: 'medium confidence result',
 		top_class: 'test.badparam.js',
@@ -571,21 +566,19 @@ describe('Test the NLC interaction with getEntities failure', function(){
 
 	before(function() {
 		mockNLP.setupMockery();
-		return nlcDb.open().then((res) => {
-			db = res;
-			return db.put({
-				// add class with description
-				_id: 'test.badparam.js',
-				description: 'Description for bad params class',
-				emittarget: 'badparam.js',
-				parameters: [
-					{
-						name: 'aname',
-						type: 'entity',
-						entityfunction: 'afunction'
-					}
-				]
-			});
+
+		return nlcDb.put({
+			// add class with description
+			_id: 'test.badparam.js',
+			description: 'Description for bad params class',
+			emittarget: 'badparam.js',
+			parameters: [
+				{
+					name: 'aname',
+					type: 'entity',
+					entityfunction: 'afunction'
+				}
+			]
 		});
 	});
 
