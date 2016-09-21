@@ -61,6 +61,8 @@ module.exports = function(robot) {
 		let descriptionPromises = classification.classes.map((clz) => {
 			return nlcconfig.getClassEmitTarget(clz.class_name).then((classData) => {
 				return (classData && classData.description) ? classData.description : clz.class_name;
+			}).catch((error) => {
+				robot.logger.error(`${TAG} Error getting description for class ${clz.class_name}.  Verify that this class has been loaded with initDb.`, error);
 			});
 		});
 
