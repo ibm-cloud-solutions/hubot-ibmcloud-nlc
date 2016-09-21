@@ -5,6 +5,7 @@
 		{
 	      "class": "nlc.data",
 	      "description": "Show data used to train the natural language classifier",
+		  "confirmprompt": "Would you like to see the data used to train the natural language classifier (yes or no)?",
 	      "emittarget": "nlc.data",
 	      "texts": [
 			"Show NLC data",
@@ -16,6 +17,7 @@
 	    {
 	      "class": "nlc.help",
 	      "description": "Get help for using the bot",
+		  "confirmprompt": "Would you like help using the bot (yes or no)?",
 	      "emittarget": "nlc.help",
 	      "texts": [
 			"How can you help me?",
@@ -27,6 +29,7 @@
 			{
 	      "class": "nlc.management.help",
 	      "description": "Get help for managing classifiers",
+		  "confirmprompt": "Would you like help managing natural language classifiers (yes or no)?",
 	      "emittarget": "nlc.management.help",
 	      "texts": [
 			"Help me with nlc",
@@ -38,6 +41,7 @@
 	    {
 	      "class": "nlc.feedback.negative",
 	      "description": "Report natural language misinterpretation",
+		  "confirmprompt": "Would you like to report a natural language misinterpretation (yes or no)?",
 	      "emittarget": "nlc.feedback.negative",
 	      "texts": [
 			"That’s not what I asked for!",
@@ -48,6 +52,7 @@
 	    {
 	      "class": "nlc.train",
 	      "description": "Train the natural language classifier",
+		  "confirmprompt": "Would you like to train the natural language classifier (yes or no)?",
 	      "emittarget": "nlc.train",
 	      "texts": [
 			"Start a training session.",
@@ -59,6 +64,7 @@
 		{
 		"class": "nlc.status",
 		"description": "Show the status for the natural language classifier",
+		"confirmprompt": "Would you like to see the status of the natural language classifier (yes or no)?",
 	  	"emittarget": "nlc.status",
 	  	"texts": [
 			"Provide the status for my classifier",
@@ -69,6 +75,7 @@
 		{
 		"class": "nlc.list",
 		"description": "List all classifiers with their status",
+		"confirmprompt": "Would you like to list the natural language classifiers with their status (yes or no)?",
 	  	"emittarget": "nlc.list",
 	  	"texts": [
 			"List my classifiers",
@@ -79,6 +86,7 @@
 		{
 		"class": "nlc.auto.approve",
 		"description": "Toggle auto approve setting for classifier training statements",
+		"confirmprompt": "Would you like to set auto approval for classifier training statements to ${autoapprove} (yes or no)?",
 			"emittarget": "nlc.auto.approve",
 			"texts": [
 			"Toggle auto approve",
