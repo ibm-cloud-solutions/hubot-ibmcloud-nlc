@@ -26,19 +26,15 @@ i18n.setLocale('en');
 
 describe('Interacting with NLC commands via Natural Language', function() {
 	let room;
-	let db;
 
 	before(function() {
 		mockUtils.setupMockery();
-		return nlcDb.open().then((res) => {
-			db = res;
-			// add classifier data for current classifier, only if it hasn't been added. Data may exist if nlc.tests runs first.
-			return db.get('cd02b5x110-nlc-5103').catch(() => {
-				return db.put({
-					_id: 'cd02b5x110-nlc-5103',
-					type: 'classifier_data',
-					trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
-				});
+		// add classifier data for current classifier, only if it hasn't been added. Data may exist if nlc.tests runs first.
+		return nlcDb.get('cd02b5x110-nlc-5103').catch(() => {
+			return nlcDb.put({
+				_id: 'cd02b5x110-nlc-5103',
+				type: 'classifier_data',
+				trainedData: 'Sample classification text,classification\nSample classification text 2,classification\nSample classification text 3,classification3'
 			});
 		});
 	});
