@@ -164,7 +164,7 @@ To integrate cognitive functionality in your Hubot
 			// Parameter values are obtain through the cognitive/nlc process.
 			// Verify that required parameter values were succesfully obtained.
 			if (parameters && parameters.location) {
-				processWeather(res, paramaters.location);
+				processWeather(res, parameters.location);
 			}
 			else {
 				robot.logger.error(`Some logged error.`);
